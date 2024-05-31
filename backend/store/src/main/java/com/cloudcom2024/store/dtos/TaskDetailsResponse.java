@@ -2,11 +2,16 @@ package com.cloudcom2024.store.dtos;
 
 import java.time.LocalDateTime;
 
-import com.cloudcom2024.store.models.Task;
-import com.cloudcom2024.store.models.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class TaskDetailResponse {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class TaskDetailsResponse {
     @JsonProperty("task_details_id")
     private long taskDetailsId;
 
@@ -23,5 +28,5 @@ public class TaskDetailResponse {
     private UserResponse friend;
 
     @JsonProperty("task")
-    private TaskDetailResponse task;
+    private TaskResponse task;
 }

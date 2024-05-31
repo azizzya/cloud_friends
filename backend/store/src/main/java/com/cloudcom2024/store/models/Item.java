@@ -12,11 +12,17 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "items")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Item {
     @Id
     @GeneratedValue
@@ -43,12 +49,12 @@ public class Item {
     }
 
     public ItemResponse convertToItemRequest() {
-        ItemResponse itemRequest = new ItemResponse();
-        itemRequest.setItemId(itemId);
-        itemRequest.setName(name);
-        itemRequest.setDescription(description);
-        itemRequest.setPrice(price); 
-        itemRequest.setCategory(category);
-        return itemRequest;
+        return ItemResponse.builder()
+            .itemId(itemId)
+            .name(name)
+            .description(description)
+            .price(price)
+            .category(category)
+            .build();
     }
 }

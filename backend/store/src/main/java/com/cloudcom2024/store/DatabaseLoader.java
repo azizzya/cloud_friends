@@ -2,137 +2,97 @@ package com.cloudcom2024.store;
 
 import java.math.BigDecimal;
 
-import org.jeasy.random.EasyRandom;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import com.cloudcom2024.store.models.Basket;
 import com.cloudcom2024.store.models.Item;
+import com.cloudcom2024.store.models.PersonalityType;
 import com.cloudcom2024.store.models.Tamagotchi;
-import com.cloudcom2024.store.models.Task;
-import com.cloudcom2024.store.models.TaskDetails;
 import com.cloudcom2024.store.models.User;
 import com.cloudcom2024.store.repositories.ItemRespository;
 import com.cloudcom2024.store.repositories.TamagotchiRepository;
-import com.cloudcom2024.store.repositories.TaskDetailsRepository;
-import com.cloudcom2024.store.repositories.TaskRepository;
 import com.cloudcom2024.store.repositories.UserRepository;
 
-import java.time.LocalDateTime;
+import net.datafaker.Faker;
+
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Locale;
 
 
 @Component
 public class DatabaseLoader implements CommandLineRunner{
     final private ItemRespository itemRespository;
-    final private TaskRepository taskRepository;
-    final private TaskDetailsRepository taskDetailsRepository;
     final private UserRepository userRepository;
     final private TamagotchiRepository tamagotchiRepository;
     final private PasswordEncoder passwordEncoder;
-    //final private EasyRandom easyRandom;
 
     public DatabaseLoader(
         ItemRespository itemRespository,
-        TaskRepository taskRepository,
-        TaskDetailsRepository taskDetailsRepository,
         UserRepository userRepository,
         TamagotchiRepository tamagotchiRepository,
         PasswordEncoder passwordEncoder
-     //   EasyRandom easyRandom
     ) {
         this.itemRespository = itemRespository;
-        this.taskRepository = taskRepository;
-        this.taskDetailsRepository = taskDetailsRepository;
         this.userRepository = userRepository;
         this.tamagotchiRepository = tamagotchiRepository;
         this.passwordEncoder = passwordEncoder;
-      //  this.easyRandom = easyRandom;
     }
 
     @Override
     public void run(String... strings) throws Exception {
-        EasyRandom randomDataGenerator = new EasyRandom();
-        List<Item> items = randomDataGenerator.objects(Item.class, 7)
-            .collect(Collectors.toList());
+        Faker faker = new Faker(new Locale("ru"));
 
-        itemRespository.saveAll(items);
+        PersonalityType introvert = new PersonalityType("introvert");
+        PersonalityType extrovert = new PersonalityType("extrovert");
 
-        Basket basket = new Basket();
-        basket.setTotalPrice(new BigDecimal("204.4"));
+        BigDecimal userCoinBalance = new BigDecimal(faker.number().numberBetween(1, 1000));
+        User user = User.builder()
+            .username("user")
+            .firstname(faker.name().firstName())
+            .lastname(faker.name().lastName())
+            .password(passwordEncoder.encode("user"))
+            .coinBalance(userCoinBalance)
+            .coinTotalScore(userCoinBalance.add(new BigDecimal("100")))
+            .roles("ROLE_USER")
+            .email("user@mail.ru")
+            .phoneNumber(faker.phoneNumber().phoneNumber())
+            .personalityType(introvert)
+            .build();
 
-        Item item1 = new Item();
-        item1.setName("Футболка");
-        item1.setPrice(new BigDecimal("102.2"));
-        item1.setCategory("Одежда");
-        item1.setBasket(basket);
-
-        Item item2 = new Item();
-        item2.setName("Шампунь джумай сынба");
-        item2.setPrice(new BigDecimal("102.2"));
-        item2.setCategory("Средства гигиены");
-        item2.setBasket(basket);
-
-        itemRespository.save(item1);
-        itemRespository.save(item2);
-
-        User user = new User();
-        user.setUsername("user");
-        user.setFirstname("dima");
-        user.setLastname("zakovalov");
-        user.setPassword(passwordEncoder.encode("user"));
-        user.setCoinBalance(new BigDecimal("100"));
-        user.setRoles("ROLE_USER");
-        user.setEmail("user@mail.ru");
-        user.setTaskDetail(null);
-
-        User admin = new User();
-        admin.setUsername("admin");
-        admin.setFirstname("dima");
-        admin.setLastname("zakovalov");
-        admin.setPassword(passwordEncoder.encode("admin"));
-        admin.setCoinBalance(new BigDecimal("1000"));
-        admin.setRoles("ROLE_ADMIN");
-        admin.setEmail("admin@mail.ru");
-        admin.setTaskDetail(null);
+        BigDecimal adminCoinBalance = new BigDecimal(faker.number().numberBetween(1, 1000));
+        User admin = User.builder()
+            .username("admin")
+            .firstname(faker.name().firstName())
+            .lastname(faker.name().lastName())
+            .password(passwordEncoder.encode("admin"))
+            .coinBalance(adminCoinBalance)
+            .coinTotalScore(adminCoinBalance.add(new BigDecimal("100")))
+            .roles("ROLE_ADMIN")
+            .email("admin@mail.ru")
+            .phoneNumber(faker.phoneNumber().phoneNumber())
+            .personalityType(extrovert)
+            .build();
 
         userRepository.save(user);
         userRepository.save(admin);
 
-        Task task = new Task();
-        task.setTitle("Поешь в столовой");
-        task.setCoinReward(new BigDecimal("102.2"));
-        Task groupTask = new Task();
-        task.setTitle("Познакомся c коллегой с ником admin");
-        task.setCoinReward(new BigDecimal("102.2"));
+        Tamagotchi tamagotchi1 = new Tamagotchi(user, faker.number().numberBetween(1, 3));
+        Tamagotchi tamagotchi2 = new Tamagotchi(admin, faker.number().numberBetween(1, 3));
 
-        taskRepository.save(task);
-        taskRepository.save(groupTask);
+        tamagotchiRepository.save(tamagotchi1);
+        tamagotchiRepository.save(tamagotchi2);
 
-        TaskDetails taskDetail = new TaskDetails();
-        taskDetail.setTaskDeadline(LocalDateTime.now());
-        taskDetail.setTimeCompletion(LocalDateTime.now());
-        taskDetail.setDone(false);
-        taskDetail.setUser(user);
-        taskDetail.setTask(task);
-        TaskDetails taskDetailGroup = new TaskDetails();
-        taskDetail.setTaskDeadline(LocalDateTime.now());
-        taskDetail.setTimeCompletion(LocalDateTime.now());
-        taskDetail.setDone(false);
-        taskDetail.setUser(user);
-        taskDetail.setTask(groupTask);
-        taskDetail.setFriend(admin);
+        List<Item> items = faker.<Item>collection(
+            () -> Item.builder()
+                .name(faker.device().modelName().toString())
+                .description(faker.lorem().sentence(10))
+                .price(new BigDecimal(faker.number().digit()))
+                .category("Девайсы")
+                .build()
+        ).maxLen(10)
+        .generate();
 
-        taskDetailsRepository.save(taskDetail);
-        taskDetailsRepository.save(taskDetailGroup);
-
-        Tamagotchi tamagotchi = new Tamagotchi();
-        tamagotchi.setHappiness(50);
-        tamagotchi.setUser(user);
-       
-        tamagotchiRepository.save(tamagotchi);
+        itemRespository.saveAll(items);
     }
-    
 }

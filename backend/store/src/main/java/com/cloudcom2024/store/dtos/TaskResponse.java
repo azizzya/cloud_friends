@@ -1,10 +1,16 @@
 package com.cloudcom2024.store.dtos;
 
 import java.math.BigDecimal;
-import java.time.Duration;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class TaskResponse {
     @JsonProperty("task_id")
     private long taskId;
@@ -17,7 +23,4 @@ public class TaskResponse {
 
     @JsonProperty("description")
     private String description;
-
-    @JsonProperty("task_to_complete")
-    private Duration taskToComplete;
 }

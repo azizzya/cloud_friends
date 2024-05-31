@@ -10,11 +10,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tamagotchi")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Tamagotchi {
     @Id
     @GeneratedValue
@@ -22,17 +28,22 @@ public class Tamagotchi {
     private long tamagothieId;
 
     @NotNull
-    @Column(name = "happiness")
-    private long happiness;
+    @Column(name = "boost")
+    private int boost;
 
     @NotNull
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
+    public Tamagotchi(User user, int boost) {
+        this.user = user;
+        this.boost = boost;
+    }
+
     public TamagotchiResponse convertToTamagotchiResponse() {
         TamagotchiResponse tamagotchiResponse = new TamagotchiResponse();
-        tamagotchiResponse.setHappiness(happiness);
+        tamagotchiResponse.setHappiness(boost);
         tamagotchiResponse.setTamagitchiID(tamagothieId);
 
         return tamagotchiResponse;

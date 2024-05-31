@@ -2,9 +2,9 @@ package com.cloudcom2024.store.models;
 
 import java.time.LocalDateTime;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.cloudcom2024.store.dtos.TaskDetailsResponse;
+import com.cloudcom2024.store.dtos.TaskResponse;
+import com.cloudcom2024.store.dtos.UserResponse;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,19 +24,14 @@ public class TaskDetails {
     @Column(name = "task_details_id")
     private long taskDetailsId;
 
-    @Column(name = "task_deadline")
-    private LocalDateTime taskDeadline;
-
-    @Column(name = "time_completed")
-    private LocalDateTime timeCompletion;
+    @Column(name = "created")
+    private LocalDateTime created = LocalDateTime.now();
 
     @Column(name = "is_done")
-    @JsonProperty("is_done")
-    private boolean isDone;
+    private boolean isDone = false;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    @JsonBackReference
     private User user;
 
     @ManyToOne
@@ -45,6 +40,16 @@ public class TaskDetails {
 
     @ManyToOne
     @JoinColumn(name = "task_id")
-    @JsonManagedReference
     private Task task;
+
+    public TaskDetailsResponse convertToTaskDetailsResponse() {
+        TaskResponse taskResponse = task.convertToTaskResponse();
+        UserResponse friendResponse = friend.convertToUserResponse();
+        return TaskDetailsResponse.builder()
+            .taskDetailsId(taskDetailsId)
+            .isDone(isDone)
+            .friend(friendResponse)
+            .task(taskResponse)
+            .build();
+    }
 }

@@ -80,17 +80,11 @@
             <artifactId>feign-httpclient</artifactId>
         </dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.jeasy/easy-random -->
+		<!-- https://mvnrepository.com/artifact/net.datafaker/datafaker -->
 		<dependency>
-    		<groupId>org.jeasy</groupId>
-    		<artifactId>easy-random-core</artifactId>
-    		<version>5.0.0</version>
-		</dependency>
-
-		<dependency>
-    		<groupId>com.github.javafaker</groupId>
-    		<artifactId>javafaker</artifactId>
-    		<version>0.15</version>
+    		<groupId>net.datafaker</groupId>
+    		<artifactId>datafaker</artifactId>
+    		<version>2.2.2</version>
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/com.google.zxing/core -->

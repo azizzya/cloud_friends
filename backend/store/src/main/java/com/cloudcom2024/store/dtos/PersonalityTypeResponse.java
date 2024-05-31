@@ -9,15 +9,9 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class MessageResponse {
-    @JsonProperty("message_id")
-    private long messageId;
-
-    @JsonProperty("role")
-    private String role;
-    
-    @JsonProperty("message")
-    private String message;
+@AllArgsConstructor
+public class PersonalityTypeResponse {
+    @JsonProperty("name")
+    private String name;
 }

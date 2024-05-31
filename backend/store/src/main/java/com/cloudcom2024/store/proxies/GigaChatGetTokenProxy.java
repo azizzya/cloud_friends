@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.cloudcom2024.store.configs.FeignConfig;
 import com.cloudcom2024.store.daos.AccessTokenDAO;
-import com.cloudcom2024.store.daos.MessageResponseDAO;
-import com.cloudcom2024.store.daos.MessageWithParammetersDAO;
 import com.cloudcom2024.store.dtos.GigaChatAccessTockenResponse;
 
 import feign.Headers;
