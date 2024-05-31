@@ -2,14 +2,13 @@ package com.cloudcom2024.store.services;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.cloudcom2024.store.dtos.TaskDetailRequest;
+import com.cloudcom2024.store.dtos.TaskDetailsRequest;
 import com.cloudcom2024.store.exceptions.TaskDetailNotFoundException;
+import com.cloudcom2024.store.exceptions.UserNotFoundException;
 import com.cloudcom2024.store.models.TaskDetails;
 import com.cloudcom2024.store.models.User;
 import com.cloudcom2024.store.repositories.TaskDetailsRepository;
@@ -34,36 +33,6 @@ public class TaskDetailsService {
             throw new TaskDetailNotFoundException("task detail not found", taskID);
         }
         taskDetailsRepository.setTaskIsDone(taskID);
-
-        //task.get().getUser().getUsername();
-        //if (!hasUserAnyActiveTask(taskDetailRequest.getUsername())) {
-            //List<Long> allTaskDetailsIDs = taskDetailsRepository.findAll().stream()
-                //.map(x -> x.getTaskDetailsId())
-                //.toList();
-            //List<Long> allTaskDetailsIDsToBeIngored = userRepository.findUserByUsername(taskDetailRequest.getUsername()).get()
-                //.getTaskDetails().stream()
-                    //.map(x -> x.getTaskDetailsId())
-                    //.toList();
-            //allTaskDetailsIDs.removeAll(allTaskDetailsIDsToBeIngored);
-            //Random rand = new Random();
-            //long randomAvailableTaskID = allTaskDetailsIDs.get(rand.nextInt(allTaskDetailsIDs.size()));
-            //taskDetailsRepository.findById(randomAvailableTaskID);
-
-            //giveUserARandomTask(taskDetailRequest.getUsername());
-        //}
-    }
-
-    private boolean hasUserAnyActiveTask(String username) {
-        List<TaskDetails>  userTasks = userRepository.findUserByUsername(username).get()
-            .getTaskDetails();
-
-        for (TaskDetails userTask: userTasks) {
-            if (!userTask.isDone()) {
-                return true;
-            }
-        }
-        return false;
-
     }
 
     public void deleteTaskDetailByID(Long taskDetailID) {
@@ -76,20 +45,14 @@ public class TaskDetailsService {
     }
 
     @Transactional
-    public void setTaskIsDoneForCurrentUserAndFriend(
-        String currentUserUsername,
-        String friendUsername,
-        Long taskDetailsID
-    ) {
-        Optional<User> currentUser = userRepository.findUserByUsername(friendUsername);
+    public void setTaskIsDoneForCurrentUserAndFriend(TaskDetailsRequest taskDetailsRequest) {
+        String friendUsername = taskDetailsRequest.getFriendUsername();
+        long currentTaskID = taskDetailsRequest.getTaskID();
+
         Optional<User> friendUser = userRepository.findUserByUsername(friendUsername);
-        if (!currentUser.isPresent() || !friendUser.isPresent()) {
-            throw new UsernameNotFoundException(String.format("user friend with username %s not found",
-                friendUser.get().getUsername()));
+        if (!friendUser.isPresent()) {
+            throw new UserNotFoundException("friend username was not found", friendUsername);
         }
-        Long currentUserID = currentUser.get().getUserId();
-        Long friendUserID = friendUser.get().getUserId();
-        taskDetailsRepository.setTaskDetailIsDoneByUserIDAndTaskID(currentUserID, taskDetailsID);
-        taskDetailsRepository.setTaskDetailIsDoneByUserIDAndTaskID(friendUserID, taskDetailsID);
+        taskDetailsRepository.setTaskDetailIsDoneByUserIDAndTaskID(friendUser.get().getUserID(), currentTaskID);
     }
 }

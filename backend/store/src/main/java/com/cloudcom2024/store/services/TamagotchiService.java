@@ -1,7 +1,5 @@
 package com.cloudcom2024.store.services;
 
-import java.util.Optional;
-
 import org.springframework.stereotype.Service;
 
 import com.cloudcom2024.store.models.Tamagotchi;
@@ -24,6 +22,6 @@ public class TamagotchiService {
 
     public Tamagotchi getTamagotchiByUserName(String username) {
         User currentUser = userRepository.findUserByUsername(username).get();
-        return tamagotchiRepository.findTamagotchiByUserID(currentUser.getUserId());
+        return tamagotchiRepository.findTamagotchiByUserID(currentUser.getUserID());
     }
 }

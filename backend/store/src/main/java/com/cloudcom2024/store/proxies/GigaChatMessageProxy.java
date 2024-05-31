@@ -4,17 +4,13 @@ package com.cloudcom2024.store.proxies;
 import java.util.Map;
 
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import com.cloudcom2024.store.configs.FeignConfig;
-import com.cloudcom2024.store.daos.AccessTokenDAO;
 import com.cloudcom2024.store.daos.MessageResponseDAO;
 import com.cloudcom2024.store.daos.MessageWithParammetersDAO;
-import com.cloudcom2024.store.dtos.GigaChatAccessTockenResponse;
-import com.cloudcom2024.store.models.Message;
 
 import feign.Headers;
 

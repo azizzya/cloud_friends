@@ -1,6 +1,5 @@
 package com.cloudcom2024.store.repositories;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.Modifying;
@@ -28,11 +27,11 @@ public interface TaskDetailsRepository extends CrudRepository<TaskDetails, Long>
     @Modifying
     @Transactional
     @Query(
-        value = "UPDATE tasks_details SET is_done = true WHERE user_id = ?1 AND task_details_id =?2",
+        value = "UPDATE tasks_details SET is_done = true WHERE friend_id = ?1 AND task_details_id =?2",
         nativeQuery = true
     )
     void setTaskDetailIsDoneByUserIDAndTaskID(
-        Long currentUsernameID,
-        Long taskDetailsID
+        Long friendID,
+        Long taskID
     );  
 } 

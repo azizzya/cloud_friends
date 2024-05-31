@@ -4,7 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.file.FileSystems;
 
-import org.bouncycastle.pqc.legacy.math.linearalgebra.Matrix;
 import org.springframework.stereotype.Component;
 
 import com.google.zxing.BarcodeFormat;

@@ -8,7 +8,7 @@ db-local:
 	-d postgres:alpine
 
 compile-app:
-	./store/mvnw clean install -DskipTests -f store/
+	./store/mvnw clean install -DskipTests -DGIGACHAT_AUTHTOKEN=${GIGACHAT_AUTHTOKEN} -f store/
 
 clean-docker: compile-app
 	docker system prune -a --volumes -f

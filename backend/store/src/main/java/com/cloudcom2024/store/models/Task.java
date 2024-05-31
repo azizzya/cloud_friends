@@ -1,11 +1,11 @@
 package com.cloudcom2024.store.models;
 
 import java.math.BigDecimal;
-import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.cloudcom2024.store.dtos.TaskResponse;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Entity
@@ -29,20 +28,28 @@ public class Task {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "coin_reward")
-    private BigDecimal coinReward;
-
     @Column(name = "description")
     private String description;
 
-    @Column(name = "task_to_complete")
-    private Duration taskToComplete;
+    @Column(name = "coin_reward")
+    private BigDecimal coinReward;
+
+    @Column(name = "time_interval_to_complete_task", columnDefinition = "INTERVAL")
+    private  LocalDateTime timeIntervalToCompleteTask;
 
     @OneToMany(mappedBy = "task", fetch = FetchType.EAGER)
-    @JsonBackReference
     private List<TaskDetails> taskDetails = new ArrayList<>();
 
     public void setTaskDetail(TaskDetails taskDetail) {
         taskDetails.add(taskDetail);
+    }
+
+    public TaskResponse convertToTaskResponse() {
+        return TaskResponse.builder()
+            .taskId(taskId)
+            .title(title)
+            .coinReward(coinReward)
+            .description(title)
+            .build();
     }
 }

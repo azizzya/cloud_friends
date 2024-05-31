@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.cloudcom2024.store.dtos.UserResponse;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -14,45 +15,47 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "users")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue
     @Column(name = "user_id")
-    private long userId;
+    private long userID;
 
-    @NotNull
     @Column(name = "username")
     private String username;
 
-    @NotNull
     @Column(name = "firstname")
     private String firstname;
 
-    @NotNull
     @Column(name = "lastname")
     private String lastname;
 
     @Column(name = "fathername")
     private String fathername;
 
-    @NotNull
     @Column(name = "password")
     private String password;
 
-    @NotNull
     @Column(name = "coin_balance")
     private BigDecimal coinBalance;
 
-    @NotNull
+    @Column(name = "coin_total_score")
+    private BigDecimal coinTotalScore;
+
     @Column(name = "roles")
     private String roles;
 
@@ -60,14 +63,20 @@ public class User {
     private String email;
 
     @Column(name = "phone_number")
+    @JsonProperty("phone_number")
     private String phoneNumber;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @JsonIgnore
     private List<TaskDetails> taskDetails = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    @JsonIgnore
     private List<Message> messages = new ArrayList<>();
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "personality_type_id")
+    private PersonalityType personalityType;
 
     public void setTaskDetail(TaskDetails taskDetail) {
         taskDetails.add(taskDetail);
@@ -78,16 +87,16 @@ public class User {
     }
 
     public UserResponse convertToUserResponse() {
-        UserResponse userResponse = new UserResponse();
-        userResponse.setUserId(userId);
-        userResponse.setUsername(username);
-        userResponse.setFirstname(firstname);
-        userResponse.setLastname(lastname);
-        userResponse.setFathername(fathername);
-        userResponse.setCoinBalance(coinBalance);
-        userResponse.setRoles(roles);
-        userResponse.setEmail(email);
-        userResponse.setPhoneNumber(phoneNumber);
-        return userResponse;
+        return UserResponse.builder()
+            .userId(userID)
+            .username(username)
+            .firstname(firstname)
+            .lastname(lastname)
+            .fathername(fathername)
+            .coinBalance(coinBalance)
+            .roles(roles)
+            .email(email)
+            .phoneNumber(phoneNumber)
+            .build();
     }
 }

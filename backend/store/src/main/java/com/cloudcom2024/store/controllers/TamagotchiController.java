@@ -8,13 +8,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cloudcom2024.store.dtos.TamagotchiResponse;
-import com.cloudcom2024.store.models.Tamagotchi;
-import com.cloudcom2024.store.repositories.TamagotchiRepository;
 import com.cloudcom2024.store.services.TamagotchiService;
 import com.cloudcom2024.store.utils.Base64Decoder;
-import com.fasterxml.jackson.databind.JsonSerializable.Base;
 
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
+@Tag(name = "Тамагочи")
+@CrossOrigin(origins = "localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/tamagotchi")
 public class TamagotchiController {
@@ -30,6 +33,12 @@ public class TamagotchiController {
     }
 
     @GetMapping
+    @Operation(description = "Получение тамаготчи по авторизированному пользователю")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK")
+        }
+    )
     public TamagotchiResponse getTamagotchi(
         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorization
     ) {
