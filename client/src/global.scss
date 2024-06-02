@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100..700;1,100..700&display=swap');
+
+$major_color: #6C33FF;
+$minor_color: #1C0221;
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+.heading1 {
+    font-family: "Roboto Mono";
+    color: $minor_color;
+    font-size: 40px;
+    margin: 0;
+}
+
+.primary-input {
+    box-sizing: border-box;
+    width: 100%;
+    height: 48px;
+    padding: 0 18px;
+
+    border: solid $minor_color 2px;
+    border-radius: 12px;
+
+    font-size: 20px;
+    font-family: "Roboto Mono";
+
+	transition: border-color 0.2s;
+
+    &:focus {
+        border-color: $major_color;
+        outline: none;
+    }
+}
+
+.primary-button {
+    width: 100%;
+    height: 48px;
+
+    border: 0;
+    border-radius: 12px;
+
+    background-color: $major_color;
+
+    color: white;
+    font-family: "Roboto Mono";
+    font-size: 20px;
+
+    &:active {
+        color: $major_color;
+        background-color: white;
+        border: solid 2px $major_color;
+    }
+}

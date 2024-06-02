@@ -1,5 +1,6 @@
 import React from 'react';
 import { Outlet } from 'react-router';
+import './global.scss'
 
 function App() {
   return (
