@@ -49,14 +49,16 @@ public class ExeptionControllerAdvice {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String, String> exceptionJsonValidationHandler(MethodArgumentNotValidException ex) {
+    public ResponseEntity<Map<String, String>> exceptionJsonValidationHandler(MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String jsonFieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(jsonFieldName, errorMessage);
         });
-        return errors;
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(errors);
     }
 
     @ExceptionHandler(UserAlreadyExistsException.class)

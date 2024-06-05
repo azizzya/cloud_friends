@@ -22,7 +22,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 
 @Tag(name = "Пользователи", description = "Взаимодествие с пользователями")
-@CrossOrigin(origins = "localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/users")
 public class UserController {

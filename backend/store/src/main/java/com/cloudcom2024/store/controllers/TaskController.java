@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 @Tag(name = "Прототипы заданий", description = "Для действий, связанных с прототипами заданиями")
-@CrossOrigin(origins = "localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {

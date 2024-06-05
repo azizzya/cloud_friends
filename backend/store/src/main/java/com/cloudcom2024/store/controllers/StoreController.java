@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Tag(name = "Магазин", description = "Для операций связанных с магазином")
-@CrossOrigin(origins = "localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/store")
 public class StoreController {
