@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 import './style.scss'
 
-interface MarketPageProps {
+interface StorePageProps {
     
 }
 
-const MarketPage: FC<MarketPageProps> = ({  }) => {
+const StorePage: FC<StorePageProps> = ({  }) => {
     return (
         <div>
             MarketPage
@@ -13,4 +13,4 @@ const MarketPage: FC<MarketPageProps> = ({  }) => {
     )
 }
 
-export default MarketPage;
+export default StorePage;

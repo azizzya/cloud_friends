@@ -1,11 +1,11 @@
 import React, { FC } from 'react'
 import './style.scss'
 
-interface MorePageProps {
+interface MenuPageProps {
     
 }
 
-const MorePage: FC<MorePageProps> = ({  }) => {
+const MenuPage: FC<MenuPageProps> = ({  }) => {
     return (
         <div>
             MorePage
@@ -13,4 +13,4 @@ const MorePage: FC<MorePageProps> = ({  }) => {
     )
 }
 
-export default MorePage;
+export default MenuPage;
