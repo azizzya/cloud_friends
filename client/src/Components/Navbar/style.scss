@@ -1,10 +1,10 @@
 @import '../../global.scss';
 
-svg {
+.navbar-svg {
     fill: grey;
 }
 
-svg.active {
+.navbar-svg-active {
     fill: $major_color;
 }
 

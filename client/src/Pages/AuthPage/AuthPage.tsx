@@ -23,7 +23,7 @@ const AuthPage: FC = () => {
     }
 
     return (
-        <div className='page-wrapper'>
+        <div className='auth-page-wrapper'>
             <h1 className='heading1'>Авторизация</h1>
             <form className='auth-form' method='post' onSubmit={handleSubmit}>
                 <div className="auth-form-inputs">
