@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom';
 import { IServiceCardProps } from './interface';
-import { useState } from 'react';
 
 export const ServiceCard: React.FC<IServiceCardProps> = ({
 	text,
