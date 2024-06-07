@@ -1,0 +1,65 @@
+@import '../../global.scss';
+
+.leaderBoard-wrapper {
+    margin-top: 24px;
+
+	width: 100%;
+
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+
+	gap: 18px;
+}
+
+.leaderBoard-user-wrapper {
+	width: 100%;
+
+	display: flex;
+	flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+	font-size: 16px;
+    color: $minor_color;
+    font-family: "Roboto";
+}
+
+.leaderBoard-user-item {
+    &:first-child {
+        display: flex;
+        align-items: center;
+    }
+
+    &-pos {
+        width: 40px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &-text {
+        margin-left: 8px;
+
+        &-login {
+            font-size: 11px;
+        }
+    }
+}
+
+.leaderBoard-user-item-img {
+    margin-left: 12px;
+
+    $img-size: 36px;
+    width: $img-size;
+    height: $img-size;
+    border: 0;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+
+    overflow: hidden;
+
+    &-img img {
+        height: $img-size;
+    }
+}
