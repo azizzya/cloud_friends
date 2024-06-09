@@ -62,10 +62,8 @@ public class TaskDetailsService {
     public void createTaskDetails(TaskDetailsRequest taskDetailsRequest) {
         long userID = taskDetailsRequest.getUserID();
         long friendID = taskDetailsRequest.getFriendID();
-        if (taskDetailsRepository.findTaskDetailsByCurrentUserID(userID).isPresent() ||
-            taskDetailsRepository.findTaskDetailsByCurrentUserID(friendID).isPresent()
-        ) {
-            
+        Optional<TaskDetails> taskDetails = taskDetailsRepository.findTaskDetailsByCurrentUserIDAndFriendID(userID, friendID);
+        if (taskDetails.isPresent() && !taskDetails.get().isDone()) {
             throw new OnlyOneTaskPerUserAvailableException("task detail with user %d or %d already exists", userID, friendID);
         }
 
