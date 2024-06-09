@@ -3,8 +3,6 @@ package com.cloudcom2024.store.services;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,7 +12,6 @@ import com.cloudcom2024.store.dtos.AuthRequest;
 import com.cloudcom2024.store.dtos.PersonalityTypeResponse;
 import com.cloudcom2024.store.dtos.UserResponse;
 import com.cloudcom2024.store.exceptions.UserAlreadyExistsException;
-import com.cloudcom2024.store.models.Task;
 import com.cloudcom2024.store.models.TaskDetails;
 import com.cloudcom2024.store.models.User;
 import com.cloudcom2024.store.models.UserProfileImage;
@@ -31,7 +28,6 @@ import jakarta.security.auth.message.AuthException;
 public class UserService {
     final private UserRepository userRepository;
     final private TaskDetailsRepository taskDetailsRepository;
-    final private TaskRepository taskRepository;
     final private UserProfileImageRepository userProfileImageRepository;
     final private PasswordEncoder passwordEncoder;
 
@@ -50,7 +46,6 @@ public class UserService {
     ) {
         this.userRepository = userRepository;
         this.taskDetailsRepository = taskDetailsRepository;
-        this.taskRepository = taskRepository;
         this.userProfileImageRepository = userProfileImageRepository;
         this.passwordEncoder = passwordEncoder;
     }

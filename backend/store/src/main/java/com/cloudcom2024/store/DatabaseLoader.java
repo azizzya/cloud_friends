@@ -2,6 +2,7 @@ package com.cloudcom2024.store;
 
 import java.io.File;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -12,11 +13,15 @@ import com.cloudcom2024.store.models.Item;
 import com.cloudcom2024.store.models.ItemImage;
 import com.cloudcom2024.store.models.PersonalityType;
 import com.cloudcom2024.store.models.Tamagotchi;
+import com.cloudcom2024.store.models.Task;
+import com.cloudcom2024.store.models.TaskDetails;
 import com.cloudcom2024.store.models.User;
 import com.cloudcom2024.store.models.UserProfileImage;
 import com.cloudcom2024.store.repositories.ItemImageRepository;
 import com.cloudcom2024.store.repositories.ItemRespository;
 import com.cloudcom2024.store.repositories.TamagotchiRepository;
+import com.cloudcom2024.store.repositories.TaskDetailsRepository;
+import com.cloudcom2024.store.repositories.TaskRepository;
 import com.cloudcom2024.store.repositories.UserProfileImageRepository;
 import com.cloudcom2024.store.repositories.UserRepository;
 
@@ -36,6 +41,8 @@ public class DatabaseLoader implements CommandLineRunner{
     final private UserRepository userRepository;
     final private UserProfileImageRepository userProfileImageRepository;
     final private TamagotchiRepository tamagotchiRepository;
+    final private TaskRepository taskRepository;
+    final private TaskDetailsRepository taskDetailsRepository;
     final private PasswordEncoder passwordEncoder;
 
     @Value("${system.home}")
@@ -47,6 +54,8 @@ public class DatabaseLoader implements CommandLineRunner{
         UserRepository userRepository,
         UserProfileImageRepository userProfileImageRepository,
         TamagotchiRepository tamagotchiRepository,
+        TaskRepository taskRepository,
+        TaskDetailsRepository taskDetailsRepository,
         PasswordEncoder passwordEncoder
     ) {
         this.itemRespository = itemRespository;
@@ -54,6 +63,8 @@ public class DatabaseLoader implements CommandLineRunner{
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
         this.tamagotchiRepository = tamagotchiRepository;
+        this.taskRepository = taskRepository;
+        this.taskDetailsRepository = taskDetailsRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -164,6 +175,19 @@ public class DatabaseLoader implements CommandLineRunner{
             counter++;
         }
 
-        
+        taskRepository.save(Task.builder()
+            .title("Покушать")
+            .description("Выпей чаю")
+            .build()
+        );
+
+        taskDetailsRepository.save(TaskDetails.builder()
+            .taskDeadline(LocalDateTime.of(2024, 8, 9, 21, 53, 24))
+            .coinReward(adminCoinBalance)
+            .user(new User(1))
+            .friend(new User(2))
+            .task(new Task(1))
+            .build()
+        );
     }
 }

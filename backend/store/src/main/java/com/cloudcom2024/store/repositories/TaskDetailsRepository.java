@@ -21,6 +21,12 @@ public interface TaskDetailsRepository extends CrudRepository<TaskDetails, Long>
     )
     Optional<TaskDetails> findTaskDetailsByCurrentUserID(long currentUserID);
 
+    @Query(
+        value = "SELECT * FROM tasks_details WHERE user_id = ?1 AND friend_id = ?2",
+        nativeQuery = true
+    )
+    Optional<TaskDetails> findTaskDetailsByCurrentUserIDAndFriendID(long currentUserID, long frindID);
+
     @Modifying
     @Transactional
     @Query(

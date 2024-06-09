@@ -47,7 +47,7 @@ public class TaskDetailsController {
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "Задание с friend_id или task id и friend username указаны не в том формате")
+            @ApiResponse(responseCode = "404", description = "задания с таким friend id нет у данного пользователя")
         }
     )
     public void completeTask(
@@ -56,36 +56,33 @@ public class TaskDetailsController {
     ) {
         String currentUsername = base64Decoder.basicAuthDecoder(authorization)[0];
         taskDetailsService.completeTaskByCurrentUserUsernameAndFriendID(currentUsername, friendID);
-        
-
-        //String friendUsername = taskDetailRequest.getFriendUsername();
-        //Long taskID = taskDetailRequest.getTaskID();
-        //TaskDetailsRequest taskDetailsRequest = TaskDetailsRequest.builder()
-            //.currentUserUsername(currentUsername)
-            //.friendUsername(friendUsername)
-            //.taskID(taskID)
-            //.build();
-
-        //taskDetailsService.setTaskIsDoneForCurrentUserAndFriend(taskDetailsRequest);
     }
 
-    //@GetMapping
-    //@Operation(description = "Получения списка непосредсвенных заданий пользователя, то есть с детализацией задания и самим заданием")
-    //@ApiResponses(
-        //value = {
-            //@ApiResponse(responseCode = "200", description = "OK")
-        //}
-    //)
-    //public List<TaskDetailsResponse> getAllTaskDetailsByUser(
-        //@RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorization
-    //) {
-        //String username = base64Decoder.basicAuthDecoder(authorization)[0];
-        //return taskDetailsService.getAllTaskDetailsByUsername(username);
-    //}
+    @GetMapping
+    @Operation(description = "Получения списка заданий пользователя, то есть с детализацией задания и самим заданием")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK")
+        }
+    )
+    public List<TaskDetailsResponse> getAllTaskDetailsByUser(
+        @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorization
+    ) {
+        String username = base64Decoder.basicAuthDecoder(authorization)[0];
+        return taskDetailsService.getAllTaskDetailsByUsername(username);
+    }
     
 
     @PostMapping
-    public void createTaskDetails(@RequestBody TaskDetailsRequest taskDetailsRequest) {
+    @Operation(description = "Выдача задания пользователю с детализацией")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Поля не прошли проверку валидации или у пользователя может быть только одно задание"),
+            @ApiResponse(responseCode = "404", description = "Пользователь или его друг, или таска с таким id не найдены")
+        }
+    )
+    public void createTaskDetails(@RequestBody @Valid TaskDetailsRequest taskDetailsRequest) {
         taskDetailsService.createTaskDetails(taskDetailsRequest);
     }
     

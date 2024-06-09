@@ -4,7 +4,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cloudcom2024.store.dtos.TaskRequest;
 import com.cloudcom2024.store.dtos.TaskResponse;
-import com.cloudcom2024.store.models.Task;
 import com.cloudcom2024.store.services.TaskService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,7 +12,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -49,6 +47,13 @@ public class TaskController {
     }
 
     @PostMapping
+    @Operation(description = "Создание задания")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "json не прошел валидацию")
+        }
+    )
     public void createTaskByHands(@RequestBody TaskRequest taskRequest) {
         taskService.createTaskByHands(taskRequest);
     }

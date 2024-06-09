@@ -4,8 +4,6 @@ import java.io.ByteArrayOutputStream;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
-import org.apache.http.util.ByteArrayBuffer;
-
 public class ImageUtil {
 
     public static byte[] compressImage(byte[] data) {
