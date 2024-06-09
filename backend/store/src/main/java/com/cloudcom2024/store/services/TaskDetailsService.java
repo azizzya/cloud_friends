@@ -46,7 +46,7 @@ public class TaskDetailsService {
         long currentUserID = userRepository.findUserByUsername(currentUserUsername).get()
             .getUserID();
 
-        Optional<TaskDetails> taskDetails = taskDetailsRepository.findTaskDetailsByCurrentUserIDAndFriendID(currentUserID, friendID);
+        Optional<TaskDetails> taskDetails = taskDetailsRepository.findActiveTaskDetailsByCurrentUserIDAndFriendID(currentUserID, friendID);
         if (!taskDetails.isPresent()) {
             throw new TaskDetailNotFoundException("task detail for current user with friend id %d not found", friendID);
         }
@@ -62,7 +62,7 @@ public class TaskDetailsService {
     public void createTaskDetails(TaskDetailsRequest taskDetailsRequest) {
         long userID = taskDetailsRequest.getUserID();
         long friendID = taskDetailsRequest.getFriendID();
-        Optional<TaskDetails> taskDetails = taskDetailsRepository.findTaskDetailsByCurrentUserIDAndFriendID(userID, friendID);
+        Optional<TaskDetails> taskDetails = taskDetailsRepository.findActiveTaskDetailsByCurrentUserIDAndFriendID(userID, friendID);
         if (taskDetails.isPresent() && !taskDetails.get().isDone()) {
             throw new OnlyOneTaskPerUserAvailableException("task detail with user %d or %d already exists", userID, friendID);
         }

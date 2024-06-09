@@ -189,5 +189,14 @@ public class DatabaseLoader implements CommandLineRunner{
             .task(new Task(1))
             .build()
         );
+
+        taskDetailsRepository.save(TaskDetails.builder()
+            .taskDeadline(LocalDateTime.of(2024, 8, 9, 21, 53, 24))
+            .coinReward(adminCoinBalance)
+            .user(new User(2))
+            .friend(new User(1))
+            .task(new Task(1))
+            .build()
+        );
     }
 }

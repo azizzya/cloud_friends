@@ -76,7 +76,7 @@ public class UserService {
         User user = userRepository.findUserByUsername(username).get();
 
         long currentUserID = user.getUserID();
-        Optional<TaskDetails> taskDetails = taskDetailsRepository.findTaskDetailsByCurrentUserID(currentUserID);
+        Optional<TaskDetails> taskDetails = taskDetailsRepository.findActiveTaskDetailsByCurrentUserID(currentUserID);
         byte[] qrCode = new byte[]{};
         if (taskDetails.isPresent() && !taskDetails.get().isDone()) {
             long friendID = taskDetails.get().getFriend().getUserID();

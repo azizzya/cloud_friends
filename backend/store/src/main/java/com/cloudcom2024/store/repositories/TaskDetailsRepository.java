@@ -16,16 +16,16 @@ public interface TaskDetailsRepository extends CrudRepository<TaskDetails, Long>
     List<TaskDetails> findAll();
 
     @Query(
-        value = "SELECT * FROM tasks_details WHERE user_id = ?1",
+        value = "SELECT * FROM tasks_details WHERE is_done = false AND user_id = ?1",
         nativeQuery = true
     )
-    Optional<TaskDetails> findTaskDetailsByCurrentUserID(long currentUserID);
+    Optional<TaskDetails> findActiveTaskDetailsByCurrentUserID(long currentUserID);
 
     @Query(
-        value = "SELECT * FROM tasks_details WHERE user_id = ?1 AND friend_id = ?2",
+        value = "SELECT * FROM tasks_details WHERE is_done = false AND (user_id = ?1 AND friend_id = ?2)",
         nativeQuery = true
     )
-    Optional<TaskDetails> findTaskDetailsByCurrentUserIDAndFriendID(long currentUserID, long frindID);
+    Optional<TaskDetails> findActiveTaskDetailsByCurrentUserIDAndFriendID(long currentUserID, long frindID);
 
     @Modifying
     @Transactional
