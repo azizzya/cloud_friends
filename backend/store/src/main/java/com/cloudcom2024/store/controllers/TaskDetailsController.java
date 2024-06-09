@@ -21,7 +21,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 @Tag(name = "Непосредственные задания", description = "Действия, связаннные с непосредственными заданиями")
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
@@ -40,44 +43,50 @@ public class TaskDetailsController {
     }
 
     @PatchMapping("/complete")
-    @Operation(description = "завершение задания по авторизированному пользователю")
+    @Operation(description = "завершение задания по username авторизированного пользователя и friend id")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "Задание с таким id не найдено или task id и friend username указаны не в том формате")
+            @ApiResponse(responseCode = "400", description = "Задание с friend_id или task id и friend username указаны не в том формате")
         }
     )
-    public void setTaskIsDone(
+    public void completeTask(
         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorization,
-        @RequestBody @Valid TaskDetailsRequest taskDetailRequest
+        @RequestParam("friend_id") long friendID
     ) {
         String currentUsername = base64Decoder.basicAuthDecoder(authorization)[0];
-        String friendUsername = taskDetailRequest.getFriendUsername();
-        Long taskID = taskDetailRequest.getTaskID();
-        TaskDetailsRequest taskDetailsRequest = TaskDetailsRequest.builder()
-            .currentUserUsername(currentUsername)
-            .friendUsername(friendUsername)
-            .taskID(taskID)
-            .build();
+        taskDetailsService.completeTaskByCurrentUserUsernameAndFriendID(currentUsername, friendID);
+        
 
-        taskDetailsService.setTaskIsDoneForCurrentUserAndFriend(taskDetailsRequest);
+        //String friendUsername = taskDetailRequest.getFriendUsername();
+        //Long taskID = taskDetailRequest.getTaskID();
+        //TaskDetailsRequest taskDetailsRequest = TaskDetailsRequest.builder()
+            //.currentUserUsername(currentUsername)
+            //.friendUsername(friendUsername)
+            //.taskID(taskID)
+            //.build();
+
+        //taskDetailsService.setTaskIsDoneForCurrentUserAndFriend(taskDetailsRequest);
     }
 
-    @GetMapping
-    @Operation(description = "Получения списка непосредсвенных заданий пользователя, то есть с детализацией задания и самим заданием")
-    @ApiResponses(
-        value = {
-            @ApiResponse(responseCode = "200", description = "OK")
-        }
-    )
-    public List<TaskDetailsResponse> getAllTaskDetailsByUser(
-        @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorization
-    ) {
-        String username = base64Decoder.basicAuthDecoder(authorization)[0];
-        
-        return taskDetailsService.getAllTaskDetailsByUsername(username).stream()
-            .map(taskDetails -> taskDetails.convertToTaskDetailsResponse())
-            .toList();
+    //@GetMapping
+    //@Operation(description = "Получения списка непосредсвенных заданий пользователя, то есть с детализацией задания и самим заданием")
+    //@ApiResponses(
+        //value = {
+            //@ApiResponse(responseCode = "200", description = "OK")
+        //}
+    //)
+    //public List<TaskDetailsResponse> getAllTaskDetailsByUser(
+        //@RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorization
+    //) {
+        //String username = base64Decoder.basicAuthDecoder(authorization)[0];
+        //return taskDetailsService.getAllTaskDetailsByUsername(username);
+    //}
+    
+
+    @PostMapping
+    public void createTaskDetails(@RequestBody TaskDetailsRequest taskDetailsRequest) {
+        taskDetailsService.createTaskDetails(taskDetailsRequest);
     }
     
 }

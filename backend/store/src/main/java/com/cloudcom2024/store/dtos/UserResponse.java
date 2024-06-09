@@ -32,6 +32,9 @@ public class UserResponse {
     @JsonProperty("coin_balance")
     private BigDecimal coinBalance;
 
+    @JsonProperty("coin_total_score")
+    private BigDecimal coinTotalScore;
+
     @JsonProperty("roles")
     private String roles;
 
@@ -43,4 +46,7 @@ public class UserResponse {
 
     @JsonProperty("qr_code")
     private byte[] qrCode;
+
+    @JsonProperty("profile_image_name")
+    private String profileImageName;
 }

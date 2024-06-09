@@ -18,7 +18,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findUserByUsername(String username);
 
     @Query(
-        value = "SELECT * FROM users ORDER BY coin_balance DESC LIMIT 100",
+        value = "SELECT * FROM users ORDER BY coin_total_score DESC LIMIT 100",
         nativeQuery = true
     )
     List<User> getAllUsersSortByCoinBalanceDESCWithLimit100();
