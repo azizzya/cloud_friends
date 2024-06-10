@@ -11,7 +11,7 @@ const LeaderBoard: FC = () => {
     useEffect(() => {
         const fetchLeaderboard = async () => {
             try {
-                const response = await instance.get('/users/leadersboard');
+                const response = await instance.get('/users/leaderboard');
                 setLeaderboard(response.data);
             } catch (error) {
                 console.error("Failed to fetch leaderboard data", error);
@@ -23,7 +23,7 @@ const LeaderBoard: FC = () => {
     }, []);
     
     if (isLoading) {
-        return <div>Загрузка...</div>
+        return <div className='loading'>Загрузка...</div>
     }
 
     return (
@@ -33,9 +33,10 @@ const LeaderBoard: FC = () => {
 					pos={index + 1}
 					key={user.user_id}
 					firstname={user.firstname}
-					coin_balance={user.coin_balance}
+					coin_total_score={user.coin_total_score}
 					username={user.username}
 					lastname={user.lastname}
+                    profile_image_name={user.profile_image_name}
 				/>
 			))}
 		</div>

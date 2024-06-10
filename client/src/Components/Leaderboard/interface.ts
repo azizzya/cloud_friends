@@ -3,7 +3,8 @@ export interface ILeaderBoardUser {
 	firstname: string;
 	lastname: string;
 	username: string;
-	coin_balance: number;
+	coin_total_score: number;
+	profile_image_name: string;
 }
 
 export interface LeaderBoardUserProps extends ILeaderBoardUser {
