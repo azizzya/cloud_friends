@@ -1,6 +1,7 @@
 package com.cloudcom2024.store.repositories;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -14,15 +15,25 @@ import com.cloudcom2024.store.models.TaskDetails;
 public interface TaskDetailsRepository extends CrudRepository<TaskDetails, Long> {
     List<TaskDetails> findAll();
 
+    @Query(
+        value = "SELECT * FROM tasks_details WHERE is_done = false AND user_id = ?1",
+        nativeQuery = true
+    )
+    Optional<TaskDetails> findActiveTaskDetailsByCurrentUserID(long currentUserID);
+
+    @Query(
+        value = "SELECT * FROM tasks_details WHERE is_done = false AND (user_id = ?1 AND friend_id = ?2)",
+        nativeQuery = true
+    )
+    Optional<TaskDetails> findActiveTaskDetailsByCurrentUserIDAndFriendID(long currentUserID, long frindID);
+
     @Modifying
     @Transactional
     @Query(
-        value = "UPDATE tasks_details SET is_done = true WHERE task_details_id = ?1",
+        value = "UPDATE tasks_details SET is_done = true WHERE user_id = ?1 AND friend_id = ?2",
         nativeQuery = true
     )
-    void setTaskIsDone(
-        Long taskDetailID
-    );
+    void setTaskIsDoneByUserIDAndFriendID(long currentUserID, long friendID);
 
     @Modifying
     @Transactional
@@ -34,4 +45,4 @@ public interface TaskDetailsRepository extends CrudRepository<TaskDetails, Long>
         Long friendID,
         Long taskID
     );  
-} 
+}

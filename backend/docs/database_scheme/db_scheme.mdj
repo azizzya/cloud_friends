@@ -475,20 +475,35 @@
 											"top": 504,
 											"width": 329.69580078125,
 											"height": 13
+										},
+										{
+											"_type": "ERDColumnView",
+											"_id": "AAAAAAGP80PjwRV2RG4=",
+											"_parent": {
+												"$ref": "AAAAAAGPDLqpE1F7X6k="
+											},
+											"model": {
+												"$ref": "AAAAAAGP80PjsRVz32Q="
+											},
+											"font": "Arial;13;0",
+											"left": 421,
+											"top": 519,
+											"width": 329.69580078125,
+											"height": 13
 										}
 									],
 									"font": "Arial;13;0",
 									"left": 416,
 									"top": 439,
 									"width": 339.69580078125,
-									"height": 83
+									"height": 98
 								}
 							],
 							"font": "Arial;13;0",
 							"left": 416,
 							"top": 416,
 							"width": 339.69580078125,
-							"height": 106,
+							"height": 121,
 							"nameLabel": {
 								"$ref": "AAAAAAGPDLqpE1F6Wag="
 							},
@@ -1473,6 +1488,16 @@
 							},
 							"name": "time_interval_to_complete_task",
 							"type": "INTERVAL",
+							"length": 0
+						},
+						{
+							"_type": "ERDColumn",
+							"_id": "AAAAAAGP80PjsRVz32Q=",
+							"_parent": {
+								"$ref": "AAAAAAGPDLqpE1F3ogY="
+							},
+							"name": "is_AIgenerated",
+							"type": "BOOLEAN",
 							"length": 0
 						}
 					]

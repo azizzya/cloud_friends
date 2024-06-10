@@ -18,11 +18,8 @@ logging:
             springframework:
                 security: debug
 
+system:
+    home: ${HOME}
+
 gigachat:
     authtoken: ${GIGACHAT_AUTHTOKEN}
-
-qrcode:
-    url:
-        host: ${QRCODE_URL_HOST:localhost}
-        port: ${QRCODE_URL_PORT:5173}
-        

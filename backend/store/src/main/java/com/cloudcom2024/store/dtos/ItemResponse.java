@@ -28,4 +28,7 @@ public class ItemResponse {
 
     @JsonProperty("category")
     private String category;
+
+    @JsonProperty("item_image_name")
+    private String itemImageName;
 }

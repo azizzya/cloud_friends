@@ -14,16 +14,22 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "tasks")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Task {
     @Id
     @GeneratedValue
     @Column(name = "task_id")
-    private long taskId;
+    private long taskID;
 
     @Column(name = "title")
     private String title;
@@ -31,14 +37,12 @@ public class Task {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "coin_reward")
-    private BigDecimal coinReward;
-
-    @Column(name = "time_interval_to_complete_task", columnDefinition = "INTERVAL")
-    private  LocalDateTime timeIntervalToCompleteTask;
-
     @OneToMany(mappedBy = "task", fetch = FetchType.EAGER)
     private List<TaskDetails> taskDetails = new ArrayList<>();
+
+    public Task(long taskID) {
+        this.taskID = taskID;
+    }
 
     public void setTaskDetail(TaskDetails taskDetail) {
         taskDetails.add(taskDetail);
@@ -46,9 +50,9 @@ public class Task {
 
     public TaskResponse convertToTaskResponse() {
         return TaskResponse.builder()
-            .taskId(taskId)
+            .taskId(taskID)
             .title(title)
-            .coinReward(coinReward)
+            .coinReward(null)
             .description(title)
             .build();
     }

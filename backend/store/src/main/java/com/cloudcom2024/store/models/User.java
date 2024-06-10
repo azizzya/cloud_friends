@@ -86,13 +86,19 @@ public class User {
         messages.add(message);
     }
 
-    public UserResponse convertToUserResponse() {
+    public User(long userID) {
+        this.userID = userID;
+    }
+
+    public UserResponse convertToUserResponse(String userProfileImage) {
         return UserResponse.builder()
             .userId(userID)
             .username(username)
             .firstname(firstname)
             .lastname(lastname)
             .fathername(fathername)
+            .coinTotalScore(coinTotalScore)
+            .profileImageName(userProfileImage)
             .coinBalance(coinBalance)
             .roles(roles)
             .email(email)

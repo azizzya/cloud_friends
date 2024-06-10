@@ -24,10 +24,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item {
+
+    public Item(long itemID) {
+        this.itemID = itemID;
+    }
+
     @Id
     @GeneratedValue
     @Column(name = "item_id")
-    private long itemId;
+    private long itemID;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -48,10 +53,11 @@ public class Item {
         baskets.add(basket);
     }
 
-    public ItemResponse convertToItemRequest() {
+    public ItemResponse convertToItemResponse(String itemImageName) {
         return ItemResponse.builder()
-            .itemId(itemId)
+            .itemId(itemID)
             .name(name)
+            .itemImageName(itemImageName)
             .description(description)
             .price(price)
             .category(category)

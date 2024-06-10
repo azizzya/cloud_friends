@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Tag(name = "Giga chat", description = "Взаимодействие с giga chat'ом")
-@CrossOrigin(origins = "localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/gigachat")
 public class ChatController {

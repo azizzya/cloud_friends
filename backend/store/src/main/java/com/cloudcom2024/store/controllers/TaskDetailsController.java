@@ -21,10 +21,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
 
 @Tag(name = "Непосредственные задания", description = "Действия, связаннные с непосредственными заданиями")
-@CrossOrigin(origins = "localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
 @RequestMapping("/tasks/details")
 public class TaskDetailsController {
@@ -40,31 +43,23 @@ public class TaskDetailsController {
     }
 
     @PatchMapping("/complete")
-    @Operation(description = "завершение задания по авторизированному пользователю")
+    @Operation(description = "завершение задания по username авторизированного пользователя и friend id")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "400", description = "Задание с таким id не найдено или task id и friend username указаны не в том формате")
+            @ApiResponse(responseCode = "404", description = "задания с таким friend id нет у данного пользователя")
         }
     )
-    public void setTaskIsDone(
+    public void completeTask(
         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorization,
-        @RequestBody @Valid TaskDetailsRequest taskDetailRequest
+        @RequestParam("friend_id") long friendID
     ) {
         String currentUsername = base64Decoder.basicAuthDecoder(authorization)[0];
-        String friendUsername = taskDetailRequest.getFriendUsername();
-        Long taskID = taskDetailRequest.getTaskID();
-        TaskDetailsRequest taskDetailsRequest = TaskDetailsRequest.builder()
-            .currentUserUsername(currentUsername)
-            .friendUsername(friendUsername)
-            .taskID(taskID)
-            .build();
-
-        taskDetailsService.setTaskIsDoneForCurrentUserAndFriend(taskDetailsRequest);
+        taskDetailsService.completeTaskByCurrentUserUsernameAndFriendID(currentUsername, friendID);
     }
 
     @GetMapping
-    @Operation(description = "Получения списка непосредсвенных заданий пользователя, то есть с детализацией задания и самим заданием")
+    @Operation(description = "Получения списка заданий пользователя, то есть с детализацией задания и самим заданием")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK")
@@ -74,10 +69,21 @@ public class TaskDetailsController {
         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorization
     ) {
         String username = base64Decoder.basicAuthDecoder(authorization)[0];
-        
-        return taskDetailsService.getAllTaskDetailsByUsername(username).stream()
-            .map(taskDetails -> taskDetails.convertToTaskDetailsResponse())
-            .toList();
+        return taskDetailsService.getAllTaskDetailsByUsername(username);
+    }
+    
+
+    @PostMapping
+    @Operation(description = "Выдача задания пользователю с детализацией")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Поля не прошли проверку валидации или у пользователя может быть только одно задание"),
+            @ApiResponse(responseCode = "404", description = "Пользователь или его друг, или таска с таким id не найдены")
+        }
+    )
+    public void createTaskDetails(@RequestBody @Valid TaskDetailsRequest taskDetailsRequest) {
+        taskDetailsService.createTaskDetails(taskDetailsRequest);
     }
     
 }
