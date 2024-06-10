@@ -18,7 +18,7 @@ const Navbar: FC = () => {
 	};
 
     return (
-        <nav className='navbar-wrapper'>
+        <nav className={activeIcon === 'auth' ? 'navbar-wrapper-none' : 'navbar-wrapper'}>
             <button onClick={() => handleClick('')}>
                 <MessageSVGComponent width='26px' height='26px' className={activeIcon === '' ? 'navbar-svg-active' : 'navbar-svg'} />
             </button>

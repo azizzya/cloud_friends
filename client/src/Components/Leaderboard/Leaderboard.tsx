@@ -1,4 +1,4 @@
-import React, { FC, lazy, useEffect, useState } from 'react'
+import React, { FC, useEffect, useState } from 'react'
 import './style.scss'
 import { LeaderBoardUser } from './LeaderboardUser';
 import instance from '../../Shared/Api/Axios.api';
@@ -7,6 +7,7 @@ import { ILeaderBoardUser } from './interface';
 const LeaderBoard: FC = () => {
     const [leaderboard, setLeaderboard] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [isError, setIsError] = useState(false)
     
     useEffect(() => {
         const fetchLeaderboard = async () => {
@@ -15,6 +16,7 @@ const LeaderBoard: FC = () => {
                 setLeaderboard(response.data);
             } catch (error) {
                 console.error("Failed to fetch leaderboard data", error);
+                setIsError(true)
             } finally {
                 setIsLoading(false)
             }
@@ -24,6 +26,10 @@ const LeaderBoard: FC = () => {
     
     if (isLoading) {
         return <div className='loading'>Загрузка...</div>
+    }
+
+    if (isError) {
+        return <div className='loading'>Ошибка загрузки</div>
     }
 
     return (

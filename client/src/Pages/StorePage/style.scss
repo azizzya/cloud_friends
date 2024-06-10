@@ -1,11 +1,30 @@
-.page-header {
-    display: flex;
-    gap: 12px;
-}
-
 .arrow-button {
     border: 0;
     background-color: transparent;
     padding: 0;
     padding-top: 10px;
+}
+
+.store-header {
+    display: flex;
+    justify-content: space-between;
+
+    &-left {
+        display: flex;
+        gap: 12px;
+    }
+
+    &-right {
+        display: flex;
+        align-items: flex-end;
+        gap: 18px;
+    }
+
+    &-balance {
+        margin-bottom: 6px;
+    }
+
+    &-cart {
+        margin-bottom: 10px;
+    }
 }
