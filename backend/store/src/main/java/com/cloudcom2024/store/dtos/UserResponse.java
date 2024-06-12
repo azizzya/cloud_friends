@@ -49,4 +49,7 @@ public class UserResponse {
 
     @JsonProperty("profile_image_name")
     private String profileImageName;
+
+    @JsonProperty("personality")
+    private PersonalityTypeResponse personalityTypeResponse;
 }

@@ -79,8 +79,8 @@ public class UserService {
         Optional<TaskDetails> taskDetails = taskDetailsRepository.findActiveTaskDetailsByCurrentUserID(currentUserID);
         byte[] qrCode = new byte[]{};
         if (taskDetails.isPresent() && !taskDetails.get().isDone()) {
-            long friendID = taskDetails.get().getFriend().getUserID();
-            qrCode = generateQRCodeWithURL(QRCODE_URL_HOST, QRCODE_URL_PORT, currentUserID, friendID);
+            //long friendID = taskDetails.get().getFriend().getUserID();
+            qrCode = generateQRCodeWithURL(QRCODE_URL_HOST, QRCODE_URL_PORT, currentUserID);
         }
 
         Optional<UserProfileImage> userProfileImage = userProfileImageRepository.findImageByUserID(user.getUserID());
@@ -88,6 +88,8 @@ public class UserService {
         if (userProfileImage.isPresent()) {
             userProfileImageName = userProfileImage.get().getName();
         }
+
+        PersonalityTypeResponse personalityTypeResponse = user.getPersonalityType().convertToPersonalityTypeResponse();
 
         return UserResponse.builder()
             .userId(user.getUserID())
@@ -97,15 +99,16 @@ public class UserService {
             .fathername(user.getFathername())
             .profileImageName(userProfileImageName)
             .coinBalance(user.getCoinBalance())
+            .personalityTypeResponse(personalityTypeResponse)
             .roles(user.getRoles())
             .phoneNumber(user.getPhoneNumber())
             .qrCode(qrCode)
             .build();
     }
 
-    private byte[] generateQRCodeWithURL(String host, String port, long current_user_id, long friend_id) {
+    private byte[] generateQRCodeWithURL(String host, String port, long friend_id) {
         String URL = String.format("%s:%d/tasks/details/complete?friend_id=%s",
-            "localhost", 8080, current_user_id, friend_id);
+            "localhost", 8080, friend_id);
         byte[] qrCode = null;
         try {
             QRCodeGenerator qrCodeGenerator = new QRCodeGenerator(URL, 320, 320);

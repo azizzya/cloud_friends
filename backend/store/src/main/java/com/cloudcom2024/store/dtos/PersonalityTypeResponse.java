@@ -12,6 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PersonalityTypeResponse {
+    @JsonProperty("personality_type_id")
+    private long personalityTypeID;
+
     @JsonProperty("name")
     private String name;
 }

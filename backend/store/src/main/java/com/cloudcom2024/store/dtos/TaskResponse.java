@@ -23,4 +23,7 @@ public class TaskResponse {
 
     @JsonProperty("description")
     private String description;
+
+    @JsonProperty("personality")
+    private PersonalityTypeResponse personalityTypeResponse;
 }

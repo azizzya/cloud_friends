@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -58,10 +59,10 @@ public class TaskController {
         taskService.createTaskByHands(taskRequest);
     }
 
-    //@PostMapping("/ai")
-    //public void createTaskWithAI(@RequestParam("personality") String personality) {
-        //taskService.createTaskByAI();
-    //}
+    @PostMapping("/ai")
+    public void createTaskWithAI(@RequestParam("personality_id") long personalityTypeID) {
+        taskService.createTaskByAI(personalityTypeID);
+    }
     
     
 

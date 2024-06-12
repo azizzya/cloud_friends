@@ -1,22 +1,26 @@
 package com.cloudcom2024.store.services;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.cloudcom2024.store.dtos.TaskDetailsRequest;
 import com.cloudcom2024.store.dtos.TaskDetailsResponse;
 import com.cloudcom2024.store.exceptions.OnlyOneTaskPerUserAvailableException;
+import com.cloudcom2024.store.exceptions.PersonalityTypesOfUserAndFriendAndTaskAreNotEqualException;
 import com.cloudcom2024.store.exceptions.TaskDetailNotFoundException;
 import com.cloudcom2024.store.exceptions.TaskNotFoundException;
 import com.cloudcom2024.store.exceptions.UserNotFoundException;
+import com.cloudcom2024.store.models.Tamagotchi;
 import com.cloudcom2024.store.models.Task;
 import com.cloudcom2024.store.models.TaskDetails;
 import com.cloudcom2024.store.models.User;
+import com.cloudcom2024.store.repositories.TamagotchiRepository;
 import com.cloudcom2024.store.repositories.TaskDetailsRepository;
 import com.cloudcom2024.store.repositories.TaskRepository;
-import com.cloudcom2024.store.repositories.UserProfileImageRepository;
 import com.cloudcom2024.store.repositories.UserRepository;
 
 @Service
@@ -24,15 +28,18 @@ public class TaskDetailsService {
     final private TaskDetailsRepository taskDetailsRepository;
     final private TaskRepository taskRepository;
     final private UserRepository userRepository;
+    final private TamagotchiRepository tamagotchiRepository;
 
     public TaskDetailsService(
         TaskDetailsRepository taskDetailsRepository,
         TaskRepository taskRepository,
-        UserRepository userRepository
+        UserRepository userRepository,
+        TamagotchiRepository tamagotchiRepository
     ) {
         this.taskDetailsRepository = taskDetailsRepository;
         this.taskRepository = taskRepository;
         this.userRepository = userRepository;
+        this.tamagotchiRepository = tamagotchiRepository;
     }
 
     public List<TaskDetailsResponse> getAllTaskDetailsByUsername(String username) {
@@ -53,6 +60,41 @@ public class TaskDetailsService {
 
         taskDetailsRepository.setTaskIsDoneByUserIDAndFriendID(currentUserID, friendID);
         taskDetailsRepository.setTaskIsDoneByUserIDAndFriendID(friendID, currentUserID);
+
+        User currentUser = userRepository.findById(currentUserID).get();
+        User friend = userRepository.findById(friendID).get();
+
+        Tamagotchi currentUserTamagotchi = tamagotchiRepository.findTamagotchiByUserID(currentUserID);
+        Tamagotchi friendTamagotchi = tamagotchiRepository.findTamagotchiByUserID(friendID);
+
+        int currentUserBoost = currentUserTamagotchi.getBoost();
+        int friendBoost = friendTamagotchi.getBoost();
+
+        BigDecimal currentUserCoinReward = taskDetails.get().getCoinReward().multiply(new BigDecimal(currentUserBoost));
+        BigDecimal friendCoinReward = taskDetails.get().getCoinReward().multiply(new BigDecimal(friendBoost));
+
+        BigDecimal currentUserCurrentCoinReward = currentUser.getCoinBalance();
+        BigDecimal currentUserCurrentTotalScore = currentUser.getCoinTotalScore();
+        currentUser.setCoinBalance(currentUserCurrentCoinReward.add(currentUserCoinReward));
+        currentUser.setCoinTotalScore(currentUserCurrentTotalScore.add(currentUserCoinReward));
+
+        BigDecimal friendCurrentCoinReward = friend.getCoinBalance(); 
+        BigDecimal friendCurrentTotalScore = friend.getCoinTotalScore();
+        friend.setCoinBalance(friendCurrentCoinReward.add(friendCoinReward));
+        friend.setCoinTotalScore(friendCurrentTotalScore.add(friendCoinReward));
+
+        userRepository.save(currentUser);
+        userRepository.save(friend);
+
+        if (currentUserBoost <= 3) {
+            currentUserTamagotchi.setBoost(currentUserBoost + 1);
+            tamagotchiRepository.save(currentUserTamagotchi);
+        }
+
+        if (friendBoost <= 3) {
+            friendTamagotchi.setBoost(friendBoost + 1);
+            tamagotchiRepository.save(friendTamagotchi);
+        }
     }
 
     public void deleteTaskDetailByID(Long taskDetailID) {
@@ -67,6 +109,10 @@ public class TaskDetailsService {
             throw new OnlyOneTaskPerUserAvailableException("task detail with user %d or %d already exists", userID, friendID);
         }
 
+        User user = taskDetails.get().getUser();
+        User friend = taskDetails.get().getFriend();
+        Task task = taskDetails.get().getTask();
+        checkIfPersonalityTypesOfUserAndFriendAndTaskAreEqual(user, friend, task);
 
         checkIfUserExistsByUserID(taskDetailsRequest.getUserID());
         checkIfUserExistsByUserID(taskDetailsRequest.getFriendID());
@@ -74,6 +120,17 @@ public class TaskDetailsService {
 
         taskDetailsRepository.save(taskDetailsRequest.convertToTaskDetails());
         taskDetailsRepository.save(taskDetailsRequest.swapUserIDAndFriendID().convertToTaskDetails());
+    }
+
+    private void checkIfPersonalityTypesOfUserAndFriendAndTaskAreEqual(User user, User friend, Task task) {
+        long userPersonalityTypeID = user.getPersonalityType().getPersonalityTypeID();
+        long friendPersonalityTypeID = friend.getPersonalityType().getPersonalityTypeID();
+        long taskPersonalityTypeID = task.getPersonalityType().getPersonalityTypeID();
+
+        if (!(userPersonalityTypeID == friendPersonalityTypeID && friendPersonalityTypeID == taskPersonalityTypeID)) {
+            throw new PersonalityTypesOfUserAndFriendAndTaskAreNotEqualException("task with id %d or user with id %d or friend with id %d does not match",
+                taskPersonalityTypeID, userPersonalityTypeID, friendPersonalityTypeID);
+        }
     }
 
     private void checkIfUserExistsByUserID(long userID) {
@@ -89,38 +146,4 @@ public class TaskDetailsService {
             throw new TaskNotFoundException("task with id does not exist", taskID);
         }
     }
-
-    //public List<TaskDetailsResponse> getAllTaskDetailsByUsername(String username) {
-        ////return userRepository.findUserByUsername(username).get()
-            ////.getTaskDetails();
-        //List<TaskDetails> tasksDetails = userRepository.findUserByUsername(username).get()
-            //.getTaskDetails();
-        //List<TaskDetailsResponse> tasksDetailsResponse = new ArrayList<>();
-        //for (TaskDetails taskDetails: tasksDetails) {
-            //UserProfileImage friendProfileImage = userProfileImageRepository.findImageByUserID(
-                //taskDetails.getFriend().getUserID()
-            //).get();
-
-            //tasksDetailsResponse.add(taskDetails.convertToTaskDetailsResponse(friendProfileImage.getUserProfileImagePath()));
-        //}
-        //return tasksDetailsResponse;
-        
-        ////return userRepository.findUserByUsername(username).get()
-            ////.getTaskDetails().stream()
-                ////.map(taskDetails -> taskDetails.convertToTaskDetailsResponse(
-                    ////userProfileImageRepository.findImageByUserID(taskDetails.getFriend().getUserID())
-                ////)).toList();
-    //}
-
-    //@Transactional
-    //public void setTaskIsDoneForCurrentUserAndFriend(TaskDetailsRequest taskDetailsRequest) {
-        //String friendUsername = taskDetailsRequest.getFriendUsername();
-        //long currentTaskID = taskDetailsRequest.getTaskID();
-
-        //Optional<User> friendUser = userRepository.findUserByUsername(friendUsername);
-        //if (!friendUser.isPresent()) {
-            //throw new UserNotFoundException("friend username was not found", friendUsername);
-        //}
-        //taskDetailsRepository.setTaskDetailIsDoneByUserIDAndTaskID(friendUser.get().getUserID(), currentTaskID);
-    //}
 }

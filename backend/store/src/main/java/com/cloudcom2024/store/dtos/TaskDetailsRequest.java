@@ -25,7 +25,7 @@ public class TaskDetailsRequest {
     private LocalDateTime taskDeadline;
 
     @NotNull(message = "coin reward musn't be blank")
-    @JsonProperty("coinReward")
+    @JsonProperty("coin_reward")
     private BigDecimal coinReward;
 
     @NotNull(message = "user id musn't be blank")
@@ -39,17 +39,6 @@ public class TaskDetailsRequest {
     @NotNull(message = "task id musn't be blank")
     @JsonProperty("task_id")
     private Long taskID;
-
-    //@JsonIgnore
-    //private String currentUserUsername;
-
-    //@NotNull(message = "task id musn't be blank")
-    //@JsonProperty("task_id")
-    //private Long taskID;
-
-    //@NotBlank(message = "friend username musn't be blank")
-    //@JsonProperty("friend_username")
-    //private String friendUsername;
 
     public TaskDetails convertToTaskDetails() {
         return TaskDetails.builder()

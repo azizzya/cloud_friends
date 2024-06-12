@@ -73,7 +73,7 @@ public class UserController {
         return userService.getUserByUsername(username);
     }
 
-    @GetMapping("/personality-type")
+    @GetMapping("/personality")
     @Operation(description = "Получение типа личности пользователя")
     @ApiResponses(
         value = {
@@ -102,13 +102,4 @@ public class UserController {
             .contentType(MediaType.IMAGE_JPEG)
             .body(image);
     }
-    
-    
-    //@PostMapping("/{userID/image}")
-    //public void uploadUserProfileImage(
-        //@RequestParam("image") MultipartFile file,
-        //@PathVariable long userID
-    //) throws IOException {
-        //imageService.uploadItemImage(file, userID);
-    //}
 }

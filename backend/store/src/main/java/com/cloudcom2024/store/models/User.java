@@ -70,20 +70,12 @@ public class User {
     @JsonIgnore
     private List<TaskDetails> taskDetails = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<Message> messages = new ArrayList<>();
-
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "personality_type_id")
     private PersonalityType personalityType;
 
     public void setTaskDetail(TaskDetails taskDetail) {
         taskDetails.add(taskDetail);
-    }
-
-    public void setMessage(Message message) {
-        messages.add(message);
     }
 
     public User(long userID) {
