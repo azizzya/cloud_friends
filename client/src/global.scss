@@ -3,10 +3,14 @@
 
 $major_color: #6C33FF;
 $minor_color: #1C0221;
+$red_color: #FF2E00;
+$green_color: #68C60A;
+$yellow_color: #FEA82F;
 
 html, body {
     margin: 0;
     padding: 0;
+    color: $minor_color;
 }
 
 .page-wrapper {
@@ -59,4 +63,11 @@ html, body {
         background-color: white;
         border: solid 2px $major_color;
     }
+}
+
+.loading {
+    font-family: 'Roboto Mono';
+    width: 100%;
+    text-align: center;
+    margin-top: 24px;
 }

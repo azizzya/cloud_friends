@@ -1,0 +1,49 @@
+@import '../../../global.scss';
+
+.happy-label {
+    margin-top: 12px;
+    display: flex;
+    width: 100%;
+}
+
+.happy-label label {
+    font-family: "Roboto Mono";
+    font-size: 18px;
+    font-weight: 400;
+    padding-inline: 2px;
+}
+
+.tooltip {
+    position: relative;
+    margin-left: 12px;
+}
+
+.tooltip-button {
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+    font-family: "Roboto";
+    border: 1px solid $minor_color;
+    border-radius: 50%;
+    background-color: transparent;
+    color: $minor_color;
+    margin-top: 4px;
+    &:active {
+        background-color: #ececec;
+    }
+}
+
+.tooltip-text {
+    font-family: "Roboto";
+    background-color: #333333;
+    color: white;
+    font-size: 14px;
+    line-height: 18px;
+    padding: 18px;
+    border-radius: 8px;
+    width: 200px;
+    position: absolute;
+    top: 30px;
+    transform: translateX(-50%);
+    z-index: 1;
+}
