@@ -22,4 +22,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
         nativeQuery = true
     )
     List<User> getAllUsersSortByCoinBalanceDESCWithLimit100();
+
+    List<User> findAll();
 } 

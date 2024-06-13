@@ -120,6 +120,8 @@ public class DatabaseLoader implements CommandLineRunner{
             () -> User.builder()
                 .username(faker.internet().username())
                 .coinTotalScore(new BigDecimal(faker.number().numberBetween(1, 1000)))
+                .password(passwordEncoder.encode("123"))
+                .roles("ROLE_USER")
                 .firstname(faker.name().firstName())
                 .lastname(faker.name().lastName())
                 .build()
@@ -184,8 +186,8 @@ public class DatabaseLoader implements CommandLineRunner{
 
         taskRepository.save(Task.builder()
             .title("Покушать")
-            .description("Выпей чаю")
-            .personalityType(new PersonalityType(1))
+            .description("Выпейте чаю")
+            .personalityType(new PersonalityType(1L))
             .isAI(false)
             .build()
         );

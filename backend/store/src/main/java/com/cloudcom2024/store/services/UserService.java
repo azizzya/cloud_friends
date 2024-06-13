@@ -12,6 +12,7 @@ import com.cloudcom2024.store.dtos.AuthRequest;
 import com.cloudcom2024.store.dtos.PersonalityTypeResponse;
 import com.cloudcom2024.store.dtos.UserResponse;
 import com.cloudcom2024.store.exceptions.UserAlreadyExistsException;
+import com.cloudcom2024.store.models.PersonalityType;
 import com.cloudcom2024.store.models.TaskDetails;
 import com.cloudcom2024.store.models.User;
 import com.cloudcom2024.store.models.UserProfileImage;
@@ -131,8 +132,7 @@ public class UserService {
 
     public PersonalityTypeResponse getPersonalityTypeByUsername(String username) {
         PersonalityTypeResponse personalityType = userRepository.findUserByUsername(username).get()
-            .getPersonalityType()
-            .convertToPersonalityTypeResponse();
+            .getPersonalityType().convertToPersonalityTypeResponse();
         return personalityType;
     }
 }

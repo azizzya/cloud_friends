@@ -2,6 +2,7 @@ package com.cloudcom2024.store.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.cloudcom2024.store.dtos.PersonalityTypeResponse;
 
@@ -25,7 +26,7 @@ public class PersonalityType {
     @Id
     @GeneratedValue
     @Column(name = "personality_type_id")
-    private long personalityTypeID;
+    private Long personalityTypeID;
 
     @Column(name = "name_EN")
     private String nameEN;
@@ -33,7 +34,7 @@ public class PersonalityType {
     @Column(name = "name_RU")
     private String nameRU;
 
-    public PersonalityType(long personalityTypeID) {
+    public PersonalityType(Long personalityTypeID) {
         this.personalityTypeID = personalityTypeID;
     }
 

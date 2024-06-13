@@ -68,7 +68,7 @@ public class TaskController {
 
     @DeleteMapping("/{taskID}")
     @Operation(description = "Удаление задания по id задания")
-    public void deleteTask(@PathVariable Long taskId) {
-        taskService.deleteTaskById(taskId);
+    public void deleteTask(@PathVariable long taskID) {
+        taskService.deleteTaskById(taskID);
     }
 }
