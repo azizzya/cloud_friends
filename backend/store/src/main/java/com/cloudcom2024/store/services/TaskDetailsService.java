@@ -23,7 +23,10 @@ import com.cloudcom2024.store.repositories.TaskDetailsRepository;
 import com.cloudcom2024.store.repositories.TaskRepository;
 import com.cloudcom2024.store.repositories.UserRepository;
 
+import lombok.extern.log4j.Log4j2;
+
 @Service
+@Log4j2
 public class TaskDetailsService {
     final private TaskDetailsRepository taskDetailsRepository;
     final private TaskRepository taskRepository;
@@ -106,17 +109,14 @@ public class TaskDetailsService {
         long friendID = taskDetailsRequest.getFriendID();
         Optional<TaskDetails> taskDetails = taskDetailsRepository.findActiveTaskDetailsByCurrentUserIDAndFriendID(userID, friendID);
         if (taskDetails.isPresent() && !taskDetails.get().isDone()) {
-            throw new OnlyOneTaskPerUserAvailableException("task detail with user %d or %d already exists", userID, friendID);
+            throw new OnlyOneTaskPerUserAvailableException("active task detail with user %d or %d already exists", userID, friendID);
         }
 
-        User user = taskDetails.get().getUser();
-        User friend = taskDetails.get().getFriend();
-        Task task = taskDetails.get().getTask();
-        checkIfPersonalityTypesOfUserAndFriendAndTaskAreEqual(user, friend, task);
+        User user = returnUserIfUserExistsByUserID(taskDetailsRequest.getUserID());
+        User friend = returnUserIfUserExistsByUserID(taskDetailsRequest.getFriendID());
+        Task task = returnTaskIfTaskExistsByTaskID(taskDetailsRequest.getTaskID());
 
-        checkIfUserExistsByUserID(taskDetailsRequest.getUserID());
-        checkIfUserExistsByUserID(taskDetailsRequest.getFriendID());
-        checkIfTaskExistsByTaskID(taskDetailsRequest.getTaskID());
+        checkIfPersonalityTypesOfUserAndFriendAndTaskAreEqual(user, friend, task);
 
         taskDetailsRepository.save(taskDetailsRequest.convertToTaskDetails());
         taskDetailsRepository.save(taskDetailsRequest.swapUserIDAndFriendID().convertToTaskDetails());
@@ -133,17 +133,19 @@ public class TaskDetailsService {
         }
     }
 
-    private void checkIfUserExistsByUserID(long userID) {
+    private User returnUserIfUserExistsByUserID(long userID) {
         Optional<User> user = userRepository.findById(userID);
         if (!user.isPresent()) {
             throw new UserNotFoundException("user with id %d not found", userID);
         }
+        return user.get();
     }
 
-    private void checkIfTaskExistsByTaskID(long taskID) {
+    private Task returnTaskIfTaskExistsByTaskID(long taskID) {
         Optional<Task> task = taskRepository.findById(taskID);
         if (!task.isPresent()) {
-            throw new TaskNotFoundException("task with id does not exist", taskID);
+            throw new TaskNotFoundException("task with id %d does not exist", taskID);
         }
+        return task.get();
     }
 }

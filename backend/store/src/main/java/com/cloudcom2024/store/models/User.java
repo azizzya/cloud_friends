@@ -83,7 +83,7 @@ public class User {
     }
 
     public UserResponse convertToUserResponse(String userProfileImage) {
-        return UserResponse.builder()
+        UserResponse userResponse = UserResponse.builder()
             .userId(userID)
             .username(username)
             .firstname(firstname)
@@ -96,5 +96,10 @@ public class User {
             .email(email)
             .phoneNumber(phoneNumber)
             .build();
+        if (personalityType != null) {
+            userResponse.setPersonalityTypeResponse(personalityType.convertToPersonalityTypeResponse());
+        }
+
+        return userResponse;
     }
 }

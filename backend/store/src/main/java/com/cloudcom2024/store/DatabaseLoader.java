@@ -185,8 +185,8 @@ public class DatabaseLoader implements CommandLineRunner{
         }
 
         taskRepository.save(Task.builder()
-            .title("Покушать")
-            .description("Выпейте чаю")
+            .title("Чаепитие")
+            .description("Выпейте вместе чаю")
             .personalityType(new PersonalityType(1L))
             .isAI(false)
             .build()
