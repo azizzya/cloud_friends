@@ -131,8 +131,11 @@ public class UserService {
     }
 
     public PersonalityTypeResponse getPersonalityTypeByUsername(String username) {
-        PersonalityTypeResponse personalityType = userRepository.findUserByUsername(username).get()
-            .getPersonalityType().convertToPersonalityTypeResponse();
-        return personalityType;
+        PersonalityType personalityType = userRepository.findUserByUsername(username).get()
+            .getPersonalityType();
+        if (personalityType == null) {
+            return null;
+        }
+        return personalityType.convertToPersonalityTypeResponse();
     }
 }
