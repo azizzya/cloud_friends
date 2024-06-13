@@ -1,4 +1,4 @@
-import { ISVGComponentProps } from './interface';
+import { ISVGComponentProps } from './interface/interface';
 
 export const MenuSVGComponent: React.FC<ISVGComponentProps> = ({
 	fillColor,

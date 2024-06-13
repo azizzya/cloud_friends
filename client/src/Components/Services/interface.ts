@@ -1,4 +1,4 @@
-import { ISVGComponentProps } from "../../Shared/SVGs/interface";
+import { ISVGComponentProps } from "../../Shared/SVGs/interface/interface";
 
 export interface IServiceCardProps {
 	id: number;

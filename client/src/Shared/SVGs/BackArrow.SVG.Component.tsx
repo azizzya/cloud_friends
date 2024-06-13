@@ -1,4 +1,4 @@
-import { ISVGComponentProps } from './interface';
+import { ISVGComponentProps } from './interface/interface';
 
 export const BackArrowSVGComponent: React.FC<ISVGComponentProps> = ({
 	fillColor,
