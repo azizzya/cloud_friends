@@ -22,7 +22,6 @@ const MainPage: FC<MainPageProps> = () => {
                 setIsError(true)
             } finally {
                 setIsLoading(false);
-                console.log(tamagotchi)
             }
         }
         fetchTamagotchi()
