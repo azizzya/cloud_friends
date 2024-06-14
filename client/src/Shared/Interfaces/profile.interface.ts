@@ -7,7 +7,7 @@ export interface IProfile {
     personality: IPersonality;
 }
 
-interface IPersonality {
+export interface IPersonality {
     personality_type_id: number;
     name: string;
 }

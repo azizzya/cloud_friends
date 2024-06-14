@@ -1,11 +1,6 @@
-export function getUserDataFromLocalStorage(): {
-	Username: string;
-	Password: string;
-} {
+export function getUserDataFromLocalStorage() {
 	let data = localStorage.getItem('userData');
-	const userData = data ? JSON.parse(data) : '';
-
-	return userData;
+	return data ? JSON.parse(data) : null
 }
 
 export function setUserDataToLocalStorage(

@@ -7,19 +7,33 @@ import StorePage from "../Pages/StorePage/StorePage";
 import MenuPage from "../Pages/MenuPage/MenuPage";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage";
 import TasksPage from "../Pages/TasksPage/TasksPage";
+import ProtectedRoute from "./ProtectedRoute";
+import GuestRoute from "./GuestRoute";
 
 export const router = createBrowserRouter([
     {
         path: '/',
         element: <App />,
         children: [
-            {path: '', element: <MainPage />},
-            {path: 'auth', element: <AuthPage />},
-            {path: 'menu/leaderboard', element: <LeaderboardPage />},
-            {path: 'menu/store', element: <StorePage />},
-            {path: 'menu', element: <MenuPage />},
-            {path: 'profile', element: <ProfilePage />},
-            {path: 'tasks', element: <TasksPage />},
+            {
+                path: '',
+                element: <ProtectedRoute />, 
+                children: [
+                    { path: '', element: <MainPage /> },
+                    { path: 'menu/leaderboard', element: <LeaderboardPage /> },
+                    { path: 'menu/store', element: <StorePage /> },
+                    { path: 'menu', element: <MenuPage /> },
+                    { path: 'profile', element: <ProfilePage /> },
+                    { path: 'tasks', element: <TasksPage /> }
+                ]
+            },
+            {
+                path: 'auth',
+                element: <GuestRoute />,
+                children: [
+                    { path: '', element: <AuthPage /> }
+                ]
+            }
         ]
     }
 ])

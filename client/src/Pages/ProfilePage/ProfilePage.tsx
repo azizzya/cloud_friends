@@ -2,6 +2,8 @@ import React, { FC, useEffect, useState } from 'react'
 import './style.scss'
 import instance from '../../Shared/Api/Axios.api'
 import { IProfile } from '../../Shared/Interfaces/profile.interface';
+import { ExitSVGComponent } from '../../Shared/SVGs/Exit.SVG.Component';
+import { removeUserDataFromLocalStorage } from '../../Shared/Helpers/LocalStorage.helpers';
 
 const ProfilePage: FC = () => {
     const [profile, setProfile] = useState<IProfile>();
@@ -39,8 +41,12 @@ const ProfilePage: FC = () => {
 			getImage(profile.profile_image_name);
 		}
 	}, [profile?.profile_image_name]);
-
     
+    const handleExit = () => {
+        removeUserDataFromLocalStorage();
+        window.location.reload();
+    }
+
     if (isLoading) {
         return <div className='loading'>Загрузка...</div>
     }
@@ -51,6 +57,9 @@ const ProfilePage: FC = () => {
 
     return (
         <div className="page-wrapper">
+            <button className='exit-button' onClick={() => handleExit()}>
+                <ExitSVGComponent width='26px' height='26px'/>
+            </button>
             <div className='profile-info'>
                 <div className='profile-info-img'>
                     <img src={image} alt='Profile'/>
@@ -65,7 +74,6 @@ const ProfilePage: FC = () => {
                 <img className='profile-qr' src={`data:image/png;base64,${profile?.qr_code}`} alt='QR Code' />
             </div>
         </div>
-        
     )
 }
 

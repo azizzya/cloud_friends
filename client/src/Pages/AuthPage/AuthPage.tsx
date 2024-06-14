@@ -1,8 +1,8 @@
 import React, { FC, useState } from 'react'
 import './style.scss'
-import axios from 'axios'
 import { setUserDataToLocalStorage } from '../../Shared/Helpers/LocalStorage.helpers'
 import { useNavigate } from 'react-router-dom'
+import instance from '../../Shared/Api/Axios.api'
 
 const AuthPage: FC = () => {
     const navigate = useNavigate()
@@ -13,7 +13,7 @@ const AuthPage: FC = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        axios.post('http://31.128.36.245:8080/auth', {username: login, password: password}).then(response => {
+        instance.post('auth', {username: login, password: password}).then(response => {
 			if (response.data === '') {
 				setUserDataToLocalStorage(password, login);
                 navigate('/')
