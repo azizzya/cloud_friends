@@ -128,7 +128,7 @@ public class TaskDetailsService {
         long taskPersonalityTypeID = task.getPersonalityType().getPersonalityTypeID();
 
         if (!(userPersonalityTypeID == friendPersonalityTypeID && friendPersonalityTypeID == taskPersonalityTypeID)) {
-            throw new PersonalityTypesOfUserAndFriendAndTaskAreNotEqualException("task with id %d or user with id %d or friend with id %d does not match",
+            throw new PersonalityTypesOfUserAndFriendAndTaskAreNotEqualException("task with id %d or user with id %d or friend with id %d does not match by personality type",
                 taskPersonalityTypeID, userPersonalityTypeID, friendPersonalityTypeID);
         }
     }

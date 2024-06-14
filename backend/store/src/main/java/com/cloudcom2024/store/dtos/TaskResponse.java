@@ -18,9 +18,6 @@ public class TaskResponse {
     @JsonProperty("title")
     private String title;
 
-    @JsonProperty("coin_reward")
-    private BigDecimal coinReward;
-
     @JsonProperty("description")
     private String description;
 

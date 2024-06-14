@@ -183,21 +183,21 @@ public class DatabaseLoader implements CommandLineRunner{
             );
             counter++;
         }
-
-        taskRepository.save(Task.builder()
-            .title("Чаепитие")
-            .description("Выпейте вместе чаю")
-            .personalityType(new PersonalityType(1L))
+        Task booksSwapTask = Task.builder()
+            .title("Книжный обмен")
+            .description("Обменяйтесь книгами, а затем просканируйте QR-код вашего коллеги")
+            .personalityType(introvert)
             .isAI(false)
-            .build()
-        );
+            .build();
+        taskRepository.save(booksSwapTask);
 
         taskDetailsRepository.save(TaskDetails.builder()
             .taskDeadline(LocalDateTime.of(2024, 8, 9, 21, 53, 24))
             .coinReward(adminCoinBalance)
             .user(new User(1))
             .friend(new User(2))
-            .task(new Task(1))
+            .task(booksSwapTask)
+            .isDone(true)
             .build()
         );
 
@@ -206,7 +206,65 @@ public class DatabaseLoader implements CommandLineRunner{
             .coinReward(adminCoinBalance)
             .user(new User(2))
             .friend(new User(1))
-            .task(new Task(1))
+            .task(booksSwapTask)
+            .isDone(true)
+            .build()
+        );
+
+        Task teaTimeTask = Task.builder()
+            .title("Чаепитие")
+            .description("Выпейте вместе чаю или кофе, а затем просканируйте QR-код вашего коллеги")
+            .personalityType(introvert)
+            .isAI(false)
+            .build();
+        taskRepository.save(teaTimeTask);
+
+        taskDetailsRepository.save(TaskDetails.builder()
+            .taskDeadline(LocalDateTime.of(2024, 8, 9, 21, 53, 24))
+            .coinReward(adminCoinBalance)
+            .user(new User(1))
+            .friend(new User(3))
+            .task(teaTimeTask)
+            .isDone(true)
+            .build()
+        );
+
+        taskDetailsRepository.save(TaskDetails.builder()
+            .taskDeadline(LocalDateTime.of(2024, 8, 9, 21, 53, 24))
+            .coinReward(adminCoinBalance)
+            .user(new User(3))
+            .friend(new User(1))
+            .task(teaTimeTask)
+            .isDone(true)
+            .build()
+        );
+
+
+        Task presentationTask = Task.builder()
+            .title("Помощь с презентацией")
+            .description("Помогите вашему коллеге, которому скоро выступать с презентацией, завершить ее, а затем просканируйте QR-код вашего коллеги")
+            .personalityType(introvert)
+            .isAI(false)
+            .build();
+        taskRepository.save(presentationTask);
+
+        taskDetailsRepository.save(TaskDetails.builder()
+            .taskDeadline(LocalDateTime.of(2024, 8, 9, 21, 53, 24))
+            .coinReward(adminCoinBalance)
+            .user(new User(1))
+            .friend(new User(2))
+            .task(presentationTask)
+            .isDone(false)
+            .build()
+        );
+
+        taskDetailsRepository.save(TaskDetails.builder()
+            .taskDeadline(LocalDateTime.of(2024, 8, 9, 21, 53, 24))
+            .coinReward(adminCoinBalance)
+            .user(new User(2))
+            .friend(new User(1))
+            .task(presentationTask)
+            .isDone(false)
             .build()
         );
     }
