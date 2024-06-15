@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cloudcom2024.store.dtos.PersonalityTypeResponse;
+import com.cloudcom2024.store.dtos.PersonalityTypeTestRequest;
 import com.cloudcom2024.store.dtos.UserResponse;
 import com.cloudcom2024.store.services.ImageService;
 import com.cloudcom2024.store.services.UserService;
@@ -27,6 +29,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.websocket.server.PathParam;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Tag(name = "Пользователи", description = "Взаимодествие с пользователями")
@@ -60,7 +63,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    @Operation(description = "Получение профиля авторизованного пользователя")
+    @Operation(description = "Получение профиля пользователя по полю Authorization")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK")
@@ -73,25 +76,26 @@ public class UserController {
         return userService.getUserByUsername(username);
     }
 
-    @PostMapping
-    @Operation(description = "Получение профиля авторизованного пользователя")
+    @PostMapping("/personality")
+    @Operation(description = "Поставить тип личности пользователю по полю Authorization")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK"),
-            @ApiResponse(responseCode = "404", description = "id личности не найден")
+            @ApiResponse(responseCode = "400", description = "null в body"),
+            @ApiResponse(responseCode = "404", description = "тип личности не найден")
         }
     )
     public void setUserPersonality(
         @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorization,
-        @PathParam("personality_id") long personalityID
+        @RequestBody List<PersonalityTypeTestRequest> personalityTypeTestRequest
     ) {
         String username = base64Decoder.basicAuthDecoder(authorization)[0];
-        userService.setUserPersonality(username, personalityID);
+        userService.setUserPersonality(username, personalityTypeTestRequest);
     }
     
 
     @GetMapping("/personality")
-    @Operation(description = "Получение типа личности пользователя")
+    @Operation(description = "Получение типа личности пользователя по полю Authorization")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK")

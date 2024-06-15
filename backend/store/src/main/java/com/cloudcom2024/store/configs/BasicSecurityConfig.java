@@ -29,6 +29,7 @@ public class BasicSecurityConfig {
                         .requestMatchers("/messages/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/users/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/tamagothi").hasAnyRole("ADMIN", "USER")
+                        .requestMatchers("/personalities").hasAnyRole("ADMIN", "USER")
                         .requestMatchers(
                             "/swagger-ui/**",
                             "v3/api-docs/**"

@@ -1,8 +1,13 @@
 package com.cloudcom2024.store.services;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -10,7 +15,9 @@ import org.springframework.stereotype.Service;
 
 import com.cloudcom2024.store.dtos.AuthRequest;
 import com.cloudcom2024.store.dtos.PersonalityTypeResponse;
+import com.cloudcom2024.store.dtos.PersonalityTypeTestRequest;
 import com.cloudcom2024.store.dtos.UserResponse;
+import com.cloudcom2024.store.exceptions.ListIsNullException;
 import com.cloudcom2024.store.exceptions.PersonalityTypeNotFound;
 import com.cloudcom2024.store.exceptions.UserAlreadyExistsException;
 import com.cloudcom2024.store.exceptions.UserNotFoundException;
@@ -26,9 +33,11 @@ import com.cloudcom2024.store.repositories.UserRepository;
 import com.cloudcom2024.store.utils.QRCodeGenerator;
 
 import jakarta.security.auth.message.AuthException;
+import lombok.extern.log4j.Log4j2;
 
 
 @Service
+@Log4j2
 public class UserService {
     final private UserRepository userRepository;
     final private PersonalityTypeRepository personalityTypeRepository;
@@ -145,14 +154,40 @@ public class UserService {
         return personalityType.convertToPersonalityTypeResponse();
     }
 
-    public void setUserPersonality(String username, long personalityID) {
-        Optional<PersonalityType> personalityType = personalityTypeRepository.findById(personalityID);
-        if (!personalityType.isPresent()) {
-            throw new PersonalityTypeNotFound("personality type with id %d not found", personalityID);
+    public void setUserPersonality(String username, List<PersonalityTypeTestRequest> personalityTypesTestRequest) {
+        String personalityNotFoundIDs = "";
+        for (var personalityTypeTestRequest: personalityTypesTestRequest) {
+            long personalityID = personalityTypeTestRequest.getPersonalityTypeID();
+            Optional<PersonalityType> personalityType = personalityTypeRepository.findById(personalityID);
+            if (!personalityType.isPresent()) {
+                personalityNotFoundIDs += String.format("%d ", personalityID);
+            }
+        }
+        if (!personalityNotFoundIDs.isEmpty()) {
+            throw new PersonalityTypeNotFound("personality type with id %s not found", personalityNotFoundIDs);
         }
 
+        PersonalityTypeTestRequest personalityTypeTestRequest = findPersonalityTypeRequestWithMaxScore(personalityTypesTestRequest);
+        long personalityIDWithMaxScore = personalityTypeTestRequest.getPersonalityTypeID();
         User user = userRepository.findUserByUsername(username).get();
-        user.setPersonalityType(new PersonalityType(personalityID));
+        user.setPersonalityType(new PersonalityType(personalityIDWithMaxScore));
         userRepository.save(user);
+    }
+
+    private PersonalityTypeTestRequest findPersonalityTypeRequestWithMaxScore(List<PersonalityTypeTestRequest> personalityTypesTestRequest) {
+        if (personalityTypesTestRequest == null) {
+            throw new ListIsNullException("list of test result is null");            
+        }
+
+        log.info(personalityTypesTestRequest);
+        PersonalityTypeTestRequest personalityTypeTestRequestWithMaxScore = personalityTypesTestRequest.get(0);
+        for (var personalityTypeTestRequest: personalityTypesTestRequest) {
+            BigDecimal maxScorePercent = personalityTypeTestRequestWithMaxScore.getScorePercent();
+            BigDecimal currentScorePercent = personalityTypeTestRequest.getScorePercent();
+            if (maxScorePercent.compareTo(currentScorePercent) == -1) {
+                personalityTypeTestRequestWithMaxScore = personalityTypeTestRequest;
+            }
+        }
+        return personalityTypeTestRequestWithMaxScore;
     }
 }

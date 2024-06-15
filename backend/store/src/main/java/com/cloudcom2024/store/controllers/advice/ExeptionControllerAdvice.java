@@ -14,6 +14,7 @@ import com.cloudcom2024.store.dtos.ErrorDetails;
 import com.cloudcom2024.store.exceptions.ImageNotFoundException;
 import com.cloudcom2024.store.exceptions.ItemImageAlreadyExistsException;
 import com.cloudcom2024.store.exceptions.ItemNotFoundException;
+import com.cloudcom2024.store.exceptions.ListIsNullException;
 import com.cloudcom2024.store.exceptions.OnlyOneTaskPerUserAvailableException;
 import com.cloudcom2024.store.exceptions.PersonalityTypeNotFound;
 import com.cloudcom2024.store.exceptions.PersonalityTypesOfUserAndFriendAndTaskAreNotEqualException;
@@ -117,6 +118,15 @@ public class ExeptionControllerAdvice {
             .body(errorDetails);
     }
 
+    @ExceptionHandler(ListIsNullException.class)
+    public ResponseEntity<ErrorDetails> exceptionListIsNullHandler(ListIsNullException ex) {
+        ErrorDetails errorDetails = new ErrorDetails();
+        errorDetails.setMessage(String.format(ex.getMessage()));
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(errorDetails);
+    }
+
     @ExceptionHandler(OnlyOneTaskPerUserAvailableException.class)
     public ResponseEntity<ErrorDetails> exceptionOnlyOneTaskPerUserAvailableHandler(OnlyOneTaskPerUserAvailableException ex) {
         ErrorDetails errorDetails = new ErrorDetails();
@@ -131,7 +141,7 @@ public class ExeptionControllerAdvice {
         ErrorDetails errorDetails = new ErrorDetails();
         errorDetails.setMessage(String.format(ex.getMessage(), ex.getPersonalityTypeID()));
         return ResponseEntity
-            .status(HttpStatus.BAD_REQUEST)
+            .status(HttpStatus.NOT_FOUND)
             .body(errorDetails);
     }
 

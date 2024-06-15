@@ -59,7 +59,7 @@ public class TaskService {
 
         Optional<PersonalityType> personalityType = personalityTypeRepository.findById(personalityTypeID);
         if (!personalityType.isPresent()) {
-            throw new PersonalityTypeNotFound("personality type with id %d not found", personalityTypeID);
+            throw new PersonalityTypeNotFound("personality type with id %s not found", String.valueOf(personalityTypeID));
         }
         String requestToBeSend = String.format("Создай задание для человека с типом личности %s", personalityType.get()
             .getNameRU());
