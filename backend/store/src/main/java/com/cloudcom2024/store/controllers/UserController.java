@@ -24,9 +24,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import jakarta.websocket.server.PathParam;
 
+import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Tag(name = "Пользователи", description = "Взаимодествие с пользователями")
@@ -72,6 +72,23 @@ public class UserController {
         String username = base64Decoder.basicAuthDecoder(authorization)[0];
         return userService.getUserByUsername(username);
     }
+
+    @PostMapping
+    @Operation(description = "Получение профиля авторизованного пользователя")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "id личности не найден")
+        }
+    )
+    public void setUserPersonality(
+        @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorization,
+        @PathParam("personality_id") long personalityID
+    ) {
+        String username = base64Decoder.basicAuthDecoder(authorization)[0];
+        userService.setUserPersonality(username, personalityID);
+    }
+    
 
     @GetMapping("/personality")
     @Operation(description = "Получение типа личности пользователя")

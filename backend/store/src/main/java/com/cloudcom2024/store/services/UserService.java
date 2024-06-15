@@ -11,11 +11,14 @@ import org.springframework.stereotype.Service;
 import com.cloudcom2024.store.dtos.AuthRequest;
 import com.cloudcom2024.store.dtos.PersonalityTypeResponse;
 import com.cloudcom2024.store.dtos.UserResponse;
+import com.cloudcom2024.store.exceptions.PersonalityTypeNotFound;
 import com.cloudcom2024.store.exceptions.UserAlreadyExistsException;
+import com.cloudcom2024.store.exceptions.UserNotFoundException;
 import com.cloudcom2024.store.models.PersonalityType;
 import com.cloudcom2024.store.models.TaskDetails;
 import com.cloudcom2024.store.models.User;
 import com.cloudcom2024.store.models.UserProfileImage;
+import com.cloudcom2024.store.repositories.PersonalityTypeRepository;
 import com.cloudcom2024.store.repositories.TaskDetailsRepository;
 import com.cloudcom2024.store.repositories.TaskRepository;
 import com.cloudcom2024.store.repositories.UserProfileImageRepository;
@@ -28,6 +31,7 @@ import jakarta.security.auth.message.AuthException;
 @Service
 public class UserService {
     final private UserRepository userRepository;
+    final private PersonalityTypeRepository personalityTypeRepository;
     final private TaskDetailsRepository taskDetailsRepository;
     final private UserProfileImageRepository userProfileImageRepository;
     final private PasswordEncoder passwordEncoder;
@@ -40,12 +44,14 @@ public class UserService {
 
     public UserService(
         UserRepository userRepository,
+        PersonalityTypeRepository personalityTypeRepository,
         TaskDetailsRepository taskDetailsRepository,
         TaskRepository taskRepository,
         UserProfileImageRepository userProfileImageRepository,
         PasswordEncoder passwordEncoder
     ) {
         this.userRepository = userRepository;
+        this.personalityTypeRepository = personalityTypeRepository;
         this.taskDetailsRepository = taskDetailsRepository;
         this.userProfileImageRepository = userProfileImageRepository;
         this.passwordEncoder = passwordEncoder;
@@ -137,5 +143,16 @@ public class UserService {
             return null;
         }
         return personalityType.convertToPersonalityTypeResponse();
+    }
+
+    public void setUserPersonality(String username, long personalityID) {
+        Optional<PersonalityType> personalityType = personalityTypeRepository.findById(personalityID);
+        if (!personalityType.isPresent()) {
+            throw new PersonalityTypeNotFound("personality type with id %d not found", personalityID);
+        }
+
+        User user = userRepository.findUserByUsername(username).get();
+        user.setPersonalityType(new PersonalityType(personalityID));
+        userRepository.save(user);
     }
 }

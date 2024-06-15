@@ -23,4 +23,7 @@ public class TaskResponse {
 
     @JsonProperty("personality")
     private PersonalityTypeResponse personalityTypeResponse;
+
+    @JsonProperty("is_ai")
+    private boolean isAI;
 }

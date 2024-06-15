@@ -66,6 +66,7 @@ public class Task {
         return TaskResponse.builder()
             .taskId(taskID)
             .title(title)
+            .isAI(isAI)
             .description(description)
             .personalityTypeResponse(personalityType.convertToPersonalityTypeResponse())
             .build();
