@@ -25,7 +25,7 @@ const TaskCompletePage: FC = () => {
             }
         }
         fetchComplete()
-    }, [])
+    }, [friend_id, navigate])
 
     
     if (isLoading) {
