@@ -89,12 +89,12 @@ public class TaskDetailsService {
         userRepository.save(currentUser);
         userRepository.save(friend);
 
-        if (currentUserBoost <= 3) {
+        if (currentUserBoost < 3) {
             currentUserTamagotchi.setBoost(currentUserBoost + 1);
             tamagotchiRepository.save(currentUserTamagotchi);
         }
 
-        if (friendBoost <= 3) {
+        if (friendBoost < 3) {
             friendTamagotchi.setBoost(friendBoost + 1);
             tamagotchiRepository.save(friendTamagotchi);
         }
