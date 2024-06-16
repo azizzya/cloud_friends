@@ -9,6 +9,7 @@ import ProfilePage from "../Pages/ProfilePage/ProfilePage";
 import TasksPage from "../Pages/TasksPage/TasksPage";
 import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
+import TaskCompletePage from "../Pages/TaskCompletePage/TaskCompletePage";
 
 export const router = createBrowserRouter([
     {
@@ -24,7 +25,8 @@ export const router = createBrowserRouter([
                     { path: 'menu/store', element: <StorePage /> },
                     { path: 'menu', element: <MenuPage /> },
                     { path: 'profile', element: <ProfilePage /> },
-                    { path: 'tasks', element: <TasksPage /> }
+                    { path: 'tasks', element: <TasksPage /> },
+                    { path: 'tasks/complete', element: <TaskCompletePage /> }
                 ]
             },
             {
