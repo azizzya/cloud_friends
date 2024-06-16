@@ -38,9 +38,7 @@ const TaskCard: FC<TaskCardProps> = ({ task, type }) => {
                         {task.coin_reward + '¢'}
                     </div>
                 </div>
-                <div className="task-wrapper-arrow" 
-                    // style={isVibible ? {display: 'none'} : {}}
-                >
+                <div className="task-wrapper-arrow">
                     {isVibible ? '▲' : '▼'}
                 </div>
             </div>
