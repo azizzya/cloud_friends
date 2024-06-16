@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Tag(name = "Пользователи", description = "Взаимодествие с пользователями")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:5173", "http://5.35.86.32:3000"}, allowCredentials = "true")
 @RestController
 @RequestMapping("/users")
 public class UserController {

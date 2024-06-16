@@ -123,8 +123,8 @@ public class UserService {
     }
 
     private byte[] generateQRCodeWithURL(String host, String port, long friend_id) {
-        String URL = String.format("%s:%d/tasks/details/complete?friend_id=%s",
-            "localhost", 8080, friend_id);
+        String URL = String.format("http://%s:%d/tasks/details/complete?friend_id=%s",
+            "5.35.86.32", 3000, friend_id);
         byte[] qrCode = null;
         try {
             QRCodeGenerator qrCodeGenerator = new QRCodeGenerator(URL, 320, 320);

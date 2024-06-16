@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Tag(name = "Непосредственные задания", description = "Действия, связаннные с непосредственными заданиями")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:5173", "http://5.35.86.32:3000"}, allowCredentials = "true")
 @RestController
 @RequestMapping("/tasks/details")
 public class TaskDetailsController {

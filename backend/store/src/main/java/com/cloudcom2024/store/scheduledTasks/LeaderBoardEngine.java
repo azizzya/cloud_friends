@@ -1,4 +1,4 @@
-package com.cloudcom2024.store.ScheduledTasks;
+package com.cloudcom2024.store.scheduledTasks;
 
 import java.math.BigDecimal;
 import java.util.List;
