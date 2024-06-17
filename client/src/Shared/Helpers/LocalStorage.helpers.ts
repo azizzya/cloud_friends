@@ -26,7 +26,7 @@ export function setUserTestData(isTested : boolean) {
 	if (localStorage.getItem('isTested')) {
 		localStorage.removeItem('isTested')
 	}
-	isTested ? localStorage.setItem('isTested', 'true') : localStorage.setItem('isTested', 'false');
+	isTested ? localStorage.setItem('isTested', 'true') : localStorage.removeItem('isTested');
 }
 
 export function getUserTestData() {

@@ -27,15 +27,17 @@ const MainPage: FC<MainPageProps> = () => {
                 setIsLoading(false);
             }
         }
-        fetchTamagotchi()
+        fetchTamagotchi()        
+    }, [])
 
+    useEffect(() => { 
         const checkIsTested = () => {
             const tested = getUserTestData()
             setIsTested(Boolean(tested))
-            console.log(tested)
         }
         checkIsTested()
-    }, [])
+    })
+
 
     if (isLoading) {
         return <div className='loading'>Загрузка...</div>
