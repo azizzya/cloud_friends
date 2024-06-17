@@ -105,9 +105,8 @@ public class UserService {
             userProfileImageName = userProfileImage.get().getName();
         }
 
-        PersonalityTypeResponse personalityTypeResponse = user.getPersonalityType().convertToPersonalityTypeResponse();
-
-        return UserResponse.builder()
+        //Optional<PersonalityTypeResponse> personalityTypeResponse = user.getPersonalityType().convertToPersonalityTypeResponse();
+        UserResponse userResponse = UserResponse.builder()
             .userId(user.getUserID())
             .username(username)
             .firstname(user.getFirstname())
@@ -115,11 +114,18 @@ public class UserService {
             .fathername(user.getFathername())
             .profileImageName(userProfileImageName)
             .coinBalance(user.getCoinBalance())
-            .personalityTypeResponse(personalityTypeResponse)
             .roles(user.getRoles())
             .phoneNumber(user.getPhoneNumber())
             .qrCode(qrCode)
             .build();
+        PersonalityType personalityType = user.getPersonalityType();
+        if (personalityType == null) {
+            userResponse.setPersonalityTypeResponse(null);
+        } else {
+            userResponse.setPersonalityTypeResponse(personalityType.convertToPersonalityTypeResponse());
+        }
+
+        return userResponse;
     }
 
     private byte[] generateQRCodeWithURL(String host, String port, long friend_id) {

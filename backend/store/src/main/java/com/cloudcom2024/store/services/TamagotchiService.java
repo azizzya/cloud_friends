@@ -7,7 +7,10 @@ import com.cloudcom2024.store.models.User;
 import com.cloudcom2024.store.repositories.TamagotchiRepository;
 import com.cloudcom2024.store.repositories.UserRepository;
 
+import lombok.extern.log4j.Log4j2;
+
 @Service
+@Log4j2
 public class TamagotchiService {
     final private UserRepository userRepository;
     final private TamagotchiRepository tamagotchiRepository;
@@ -22,6 +25,7 @@ public class TamagotchiService {
 
     public Tamagotchi getTamagotchiByUserName(String username) {
         User currentUser = userRepository.findUserByUsername(username).get();
+        log.info(currentUser.getUserID());
         return tamagotchiRepository.findTamagotchiByUserID(currentUser.getUserID());
     }
 }
