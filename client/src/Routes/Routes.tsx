@@ -10,6 +10,7 @@ import TasksPage from "../Pages/TasksPage/TasksPage";
 import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
 import TaskCompletePage from "../Pages/TaskCompletePage/TaskCompletePage";
+import TestPage from "../Pages/TestPage/TestPage";
 
 export const router = createBrowserRouter([
     {
@@ -26,7 +27,8 @@ export const router = createBrowserRouter([
                     { path: 'menu', element: <MenuPage /> },
                     { path: 'profile', element: <ProfilePage /> },
                     { path: 'tasks', element: <TasksPage /> },
-                    { path: 'tasks/complete', element: <TaskCompletePage /> }
+                    { path: 'tasks/complete', element: <TaskCompletePage /> },
+                    { path: 'test', element: <TestPage /> }
                 ]
             },
             {

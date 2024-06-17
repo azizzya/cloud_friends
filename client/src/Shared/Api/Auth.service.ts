@@ -5,7 +5,7 @@ import { setUserDataToLocalStorage } from '../Helpers/LocalStorage.helpers';
 class AuthService {
 	async auth({username, password}: IUserLogIn) {
 		return axios.post('http://31.128.36.245:8080/auth', {username, password}).then(response => {
-			if (response.data === '') {
+			if (response.status === 200) {
 				setUserDataToLocalStorage(password, username)
 			}
 			return response;

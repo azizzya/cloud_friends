@@ -1,0 +1,34 @@
+@import '../../global.scss';
+
+.question {
+    margin-top: 20px;
+    font-family: "Roboto";
+
+    background-color: $special_color;
+
+    padding: 12px 16px;
+
+    border: 0;
+    border-radius: 8px;
+
+    &-name {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    &-answer {
+        display: block;
+        margin-top: 12px;
+    }
+}
+
+.test-send-button {
+    margin-top: 20px;
+    &:disabled {
+        background-color: $special_color;
+    }
+    &:disabled:active {
+        border: 0;
+        color: white;
+    }
+}

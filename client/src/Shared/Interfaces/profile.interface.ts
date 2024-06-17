@@ -4,7 +4,7 @@ export interface IProfile {
     lastname: string;
     qr_code?: string;
     profile_image_name: string;
-    personality: IPersonality;
+    personality?: IPersonality;
 }
 
 export interface IPersonality {

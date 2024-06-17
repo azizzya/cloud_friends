@@ -1,6 +1,6 @@
 import React, { FC, useState } from 'react'
 import './style.scss'
-import { setUserDataToLocalStorage } from '../../Shared/Helpers/LocalStorage.helpers'
+import { setUserDataToLocalStorage, setUserTestData } from '../../Shared/Helpers/LocalStorage.helpers'
 import { useNavigate } from 'react-router-dom'
 import instance from '../../Shared/Api/Axios.api'
 
@@ -14,8 +14,15 @@ const AuthPage: FC = () => {
         e.preventDefault();
 
         instance.post('auth', {username: login, password: password}).then(response => {
-			if (response.data === '') {
+			if (response.status === 200) {
 				setUserDataToLocalStorage(password, login);
+                instance.get('users/personality').then(response => {
+                    if (response.status === 200 && response.data === '') {
+                        setUserTestData(false)
+                    } else if (response.status === 200 && response.data !== '') {
+                        setUserTestData(true)
+                    }
+                })
                 navigate('/')
             }
             return response
@@ -30,7 +37,7 @@ const AuthPage: FC = () => {
                     <input type="text" className='primary-input' placeholder='Логин' value={login} onChange={e => setLogin(e.target.value)}/>
                     <input type="password" className='primary-input' placeholder='Пароль' value={password} onChange={e => setPassword(e.target.value)}/>
                 </div>
-                <button className='primary-button'>Авторизоваться</button>
+                <button className='primary-button auth-button'>Авторизоваться</button>
             </form>
             <div className="auth-error">
                 {error}

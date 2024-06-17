@@ -67,9 +67,13 @@ const ProfilePage: FC = () => {
                 <div className='profile-info-name'>
                     {`${profile?.firstname} ${profile?.lastname}`}
                 </div>
-                <div className={`profile-info-personality-${profile?.personality.personality_type_id}`}>
-                    {`${profile?.personality.name}`}
-                </div>
+                {profile?.personality !== null ?
+                    <div className={`profile-info-personality-${profile?.personality && profile?.personality.personality_type_id}`}>
+                        {`${profile?.personality && profile?.personality.name}`}
+                    </div>
+                    :
+                    ''
+                }
                 <div className='profile-info-text-login'>{`@${profile?.username}`}</div>
                 {profile?.qr_code !== "" ?
                     <img className='profile-qr' src={`data:image/png;base64,${profile?.qr_code}`} alt='QR Code' />

@@ -2,6 +2,8 @@ import React, { FC, useEffect, useState } from 'react'
 import './style.scss'
 import instance from '../../Shared/Api/Axios.api'
 import Tamagotchi, { ITamagotchi } from '../../Components/Tamagotchi/Tamagotchi';
+import { getUserTestData } from '../../Shared/Helpers/LocalStorage.helpers';
+import TestModal from '../../Components/TestModal/TestModal';
 
 interface MainPageProps {
     
@@ -11,6 +13,7 @@ const MainPage: FC<MainPageProps> = () => {
     const [tamagotchi, setTamagotchi] = useState<ITamagotchi>();
     const [isLoading, setIsLoading] = useState(true);
     const [isError, setIsError] = useState(false);
+    const [isTested, setIsTested] = useState(Boolean);
 
     useEffect(() => {
         const fetchTamagotchi = async () => {
@@ -25,6 +28,13 @@ const MainPage: FC<MainPageProps> = () => {
             }
         }
         fetchTamagotchi()
+
+        const checkIsTested = () => {
+            const tested = getUserTestData()
+            setIsTested(Boolean(tested))
+            console.log(tested)
+        }
+        checkIsTested()
     }, [])
 
     if (isLoading) {
@@ -37,6 +47,7 @@ const MainPage: FC<MainPageProps> = () => {
 
     return (
         <div className="page-wrapper">
+            {!isTested ? <TestModal /> : ''}
             <Tamagotchi happiness={tamagotchi?.happiness}/>
         </div>
     )

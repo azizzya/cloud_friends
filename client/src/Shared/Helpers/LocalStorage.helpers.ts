@@ -6,7 +6,7 @@ export function getUserDataFromLocalStorage() {
 export function setUserDataToLocalStorage(
 	userPassword: string,
 	userLogin: string
-): void {
+) {
 	if (localStorage.getItem('userData')) {
 		localStorage.removeItem('userData');
 	}
@@ -17,6 +17,18 @@ export function setUserDataToLocalStorage(
 	);
 }
 
-export function removeUserDataFromLocalStorage(): void {
+export function removeUserDataFromLocalStorage() {
 	localStorage.removeItem('userData');
+	localStorage.removeItem('isTested');
+}
+
+export function setUserTestData(isTested : boolean) {
+	if (localStorage.getItem('isTested')) {
+		localStorage.removeItem('isTested')
+	}
+	isTested ? localStorage.setItem('isTested', 'true') : localStorage.setItem('isTested', 'false');
+}
+
+export function getUserTestData() {
+	return localStorage.getItem('isTested')
 }
