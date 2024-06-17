@@ -74,7 +74,7 @@ public class DatabaseLoader implements CommandLineRunner{
 
     @Override
     public void run(String... strings) throws Exception {
-        Faker faker = new Faker(new Locale("ru"));
+        Faker faker = new Faker(new Locale("en"));
 
         String ITEM_FOLDER_PATH = SYSTEM_HOME + "/Application/CloudCom/static/itemImages";
         String USER_PROFILE_FOLDER_PATH = SYSTEM_HOME + "/Application/CloudCom/static/userProfileImages";
@@ -152,6 +152,10 @@ public class DatabaseLoader implements CommandLineRunner{
 
         Tamagotchi tamagotchi1 = new Tamagotchi(user, faker.number().numberBetween(1, 3));
         Tamagotchi tamagotchi2 = new Tamagotchi(admin, faker.number().numberBetween(1, 3));
+        for (var otherUser: otherUsers) {
+            Tamagotchi tamagotchi = new Tamagotchi(otherUser, faker.number().numberBetween(1, 3));
+            tamagotchiRepository.save(tamagotchi);
+        }
 
         tamagotchiRepository.save(tamagotchi1);
         tamagotchiRepository.save(tamagotchi2);
