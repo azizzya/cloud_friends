@@ -2,6 +2,7 @@ package com.cloudcom2024.store.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.cloudcom2024.store.dtos.PersonalityTypeResponse;
 
@@ -25,10 +26,17 @@ public class PersonalityType {
     @Id
     @GeneratedValue
     @Column(name = "personality_type_id")
-    private long personalityTypeID;
+    private Long personalityTypeID;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "name_EN")
+    private String nameEN;
+
+    @Column(name = "name_RU")
+    private String nameRU;
+
+    public PersonalityType(Long personalityTypeID) {
+        this.personalityTypeID = personalityTypeID;
+    }
 
     @OneToMany(
         mappedBy = "personalityType",
@@ -36,8 +44,15 @@ public class PersonalityType {
     )
     private List<User> users = new ArrayList<>();
 
-    public PersonalityType(String name) {
-        this.name = name;
+    @OneToMany(
+        mappedBy = "personalityType",
+        fetch = FetchType.EAGER
+    )
+    private List<Task> tasks = new ArrayList<>();
+
+    public PersonalityType(String nameEN, String nameRU) {
+        this.nameEN = nameEN;
+        this.nameRU = nameRU;
     }
     
     public void addUser(User user) {
@@ -46,7 +61,8 @@ public class PersonalityType {
 
     public PersonalityTypeResponse convertToPersonalityTypeResponse() {
         return PersonalityTypeResponse.builder()
-            .name(name)
+            .personalityTypeID(personalityTypeID)
+            .name(nameRU)
             .build();
     }
 }

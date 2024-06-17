@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -25,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Tag(name = "Прототипы заданий", description = "Для действий, связанных с прототипами заданиями")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:5173", "http://5.35.86.32:3000"}, allowCredentials = "true")
 @RestController
 @RequestMapping("/tasks")
 public class TaskController {
@@ -58,16 +59,16 @@ public class TaskController {
         taskService.createTaskByHands(taskRequest);
     }
 
-    //@PostMapping("/ai")
-    //public void createTaskWithAI(@RequestParam("personality") String personality) {
-        //taskService.createTaskByAI();
-    //}
+    @PostMapping("/ai")
+    public void createTaskWithAI(@RequestParam("personality_id") long personalityTypeID) {
+        taskService.createTaskByAI(personalityTypeID);
+    }
     
     
 
     @DeleteMapping("/{taskID}")
     @Operation(description = "Удаление задания по id задания")
-    public void deleteTask(@PathVariable Long taskId) {
-        taskService.deleteTaskById(taskId);
+    public void deleteTask(@PathVariable long taskID) {
+        taskService.deleteTaskById(taskID);
     }
 }

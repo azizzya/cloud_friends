@@ -3,6 +3,7 @@ package com.cloudcom2024.store.dtos;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
+import com.cloudcom2024.store.models.PersonalityType;
 import com.cloudcom2024.store.models.Task;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -25,10 +26,15 @@ public class TaskRequest {
     @JsonProperty("description")
     private String description;
 
+    @NotEmpty(message = "personality type id musn't be blank")
+    @JsonProperty("personality_id")
+    private Long personalityTypeID;
+
     public Task convertToTask() {
         return Task.builder()
             .title(title)
             .description(description)
+            .personalityType(new PersonalityType(personalityTypeID))
             .build();
     }
 }

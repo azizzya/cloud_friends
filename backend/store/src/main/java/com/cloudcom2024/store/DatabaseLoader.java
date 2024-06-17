@@ -19,6 +19,7 @@ import com.cloudcom2024.store.models.User;
 import com.cloudcom2024.store.models.UserProfileImage;
 import com.cloudcom2024.store.repositories.ItemImageRepository;
 import com.cloudcom2024.store.repositories.ItemRespository;
+import com.cloudcom2024.store.repositories.PersonalityTypeRepository;
 import com.cloudcom2024.store.repositories.TamagotchiRepository;
 import com.cloudcom2024.store.repositories.TaskDetailsRepository;
 import com.cloudcom2024.store.repositories.TaskRepository;
@@ -41,6 +42,7 @@ public class DatabaseLoader implements CommandLineRunner{
     final private UserRepository userRepository;
     final private UserProfileImageRepository userProfileImageRepository;
     final private TamagotchiRepository tamagotchiRepository;
+    final private PersonalityTypeRepository personalityTypeRepository;
     final private TaskRepository taskRepository;
     final private TaskDetailsRepository taskDetailsRepository;
     final private PasswordEncoder passwordEncoder;
@@ -54,6 +56,7 @@ public class DatabaseLoader implements CommandLineRunner{
         UserRepository userRepository,
         UserProfileImageRepository userProfileImageRepository,
         TamagotchiRepository tamagotchiRepository,
+        PersonalityTypeRepository personalityTypeRepository,
         TaskRepository taskRepository,
         TaskDetailsRepository taskDetailsRepository,
         PasswordEncoder passwordEncoder
@@ -63,6 +66,7 @@ public class DatabaseLoader implements CommandLineRunner{
         this.userRepository = userRepository;
         this.userProfileImageRepository = userProfileImageRepository;
         this.tamagotchiRepository = tamagotchiRepository;
+        this.personalityTypeRepository = personalityTypeRepository;
         this.taskRepository = taskRepository;
         this.taskDetailsRepository = taskDetailsRepository;
         this.passwordEncoder = passwordEncoder;
@@ -75,8 +79,11 @@ public class DatabaseLoader implements CommandLineRunner{
         String ITEM_FOLDER_PATH = SYSTEM_HOME + "/Application/CloudCom/static/itemImages";
         String USER_PROFILE_FOLDER_PATH = SYSTEM_HOME + "/Application/CloudCom/static/userProfileImages";
 
-        PersonalityType introvert = new PersonalityType("introvert");
-        PersonalityType extrovert = new PersonalityType("extrovert");
+        PersonalityType introvert = new PersonalityType("introvert", "интроверт");
+        PersonalityType extrovert = new PersonalityType("extrovert", "экстраверт");
+
+        personalityTypeRepository.save(introvert);
+        personalityTypeRepository.save(extrovert);
 
         BigDecimal userCoinBalance = new BigDecimal(faker.number().numberBetween(1, 1000));
         User user = User.builder()
@@ -103,7 +110,7 @@ public class DatabaseLoader implements CommandLineRunner{
             .roles("ROLE_ADMIN")
             .email("admin@mail.ru")
             .phoneNumber(faker.phoneNumber().phoneNumber())
-            .personalityType(extrovert)
+            .personalityType(introvert)
             .build();
 
         userRepository.save(user);
@@ -113,6 +120,8 @@ public class DatabaseLoader implements CommandLineRunner{
             () -> User.builder()
                 .username(faker.internet().username())
                 .coinTotalScore(new BigDecimal(faker.number().numberBetween(1, 1000)))
+                .password(passwordEncoder.encode("123"))
+                .roles("ROLE_USER")
                 .firstname(faker.name().firstName())
                 .lastname(faker.name().lastName())
                 .build()
@@ -174,19 +183,21 @@ public class DatabaseLoader implements CommandLineRunner{
             );
             counter++;
         }
-
-        taskRepository.save(Task.builder()
-            .title("Покушать")
-            .description("Выпей чаю")
-            .build()
-        );
+        Task booksSwapTask = Task.builder()
+            .title("Книжный обмен")
+            .description("Обменяйтесь книгами, а затем просканируйте QR-код вашего коллеги")
+            .personalityType(introvert)
+            .isAI(false)
+            .build();
+        taskRepository.save(booksSwapTask);
 
         taskDetailsRepository.save(TaskDetails.builder()
             .taskDeadline(LocalDateTime.of(2024, 8, 9, 21, 53, 24))
             .coinReward(adminCoinBalance)
             .user(new User(1))
             .friend(new User(2))
-            .task(new Task(1))
+            .task(booksSwapTask)
+            .isDone(true)
             .build()
         );
 
@@ -195,7 +206,65 @@ public class DatabaseLoader implements CommandLineRunner{
             .coinReward(adminCoinBalance)
             .user(new User(2))
             .friend(new User(1))
-            .task(new Task(1))
+            .task(booksSwapTask)
+            .isDone(true)
+            .build()
+        );
+
+        Task teaTimeTask = Task.builder()
+            .title("Чаепитие")
+            .description("Выпейте вместе чаю или кофе, а затем просканируйте QR-код вашего коллеги")
+            .personalityType(introvert)
+            .isAI(false)
+            .build();
+        taskRepository.save(teaTimeTask);
+
+        taskDetailsRepository.save(TaskDetails.builder()
+            .taskDeadline(LocalDateTime.of(2024, 8, 9, 21, 53, 24))
+            .coinReward(adminCoinBalance)
+            .user(new User(1))
+            .friend(new User(3))
+            .task(teaTimeTask)
+            .isDone(true)
+            .build()
+        );
+
+        taskDetailsRepository.save(TaskDetails.builder()
+            .taskDeadline(LocalDateTime.of(2024, 8, 9, 21, 53, 24))
+            .coinReward(adminCoinBalance)
+            .user(new User(3))
+            .friend(new User(1))
+            .task(teaTimeTask)
+            .isDone(true)
+            .build()
+        );
+
+
+        Task presentationTask = Task.builder()
+            .title("Помощь с презентацией")
+            .description("Помогите вашему коллеге, которому скоро выступать с презентацией, завершить ее, а затем просканируйте QR-код вашего коллеги")
+            .personalityType(introvert)
+            .isAI(false)
+            .build();
+        taskRepository.save(presentationTask);
+
+        taskDetailsRepository.save(TaskDetails.builder()
+            .taskDeadline(LocalDateTime.of(2024, 8, 9, 21, 53, 24))
+            .coinReward(adminCoinBalance)
+            .user(new User(1))
+            .friend(new User(2))
+            .task(presentationTask)
+            .isDone(false)
+            .build()
+        );
+
+        taskDetailsRepository.save(TaskDetails.builder()
+            .taskDeadline(LocalDateTime.of(2024, 8, 9, 21, 53, 24))
+            .coinReward(adminCoinBalance)
+            .user(new User(2))
+            .friend(new User(1))
+            .task(presentationTask)
+            .isDone(false)
             .build()
         );
     }

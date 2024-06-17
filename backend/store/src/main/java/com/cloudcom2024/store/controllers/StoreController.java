@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 
 @Tag(name = "Магазин", description = "Для операций связанных с магазином")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:5173", "http://5.35.86.32:3000"}, allowCredentials = "true")
 @RestController
 @RequestMapping("/store")
 public class StoreController {

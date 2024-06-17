@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cloudcom2024.store.dtos.PersonalityTypeResponse;
+import com.cloudcom2024.store.dtos.PersonalityTypeTestRequest;
 import com.cloudcom2024.store.dtos.UserResponse;
 import com.cloudcom2024.store.services.ImageService;
 import com.cloudcom2024.store.services.UserService;
@@ -24,13 +26,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import jakarta.websocket.server.PathParam;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 
 @Tag(name = "Пользователи", description = "Взаимодествие с пользователями")
-@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
+@CrossOrigin(origins = {"http://localhost:5173", "http://5.35.86.32:3000"}, allowCredentials = "true")
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -60,7 +63,7 @@ public class UserController {
     }
 
     @GetMapping("/profile")
-    @Operation(description = "Получение профиля авторизованного пользователя")
+    @Operation(description = "Получение профиля пользователя по полю Authorization")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK")
@@ -73,8 +76,26 @@ public class UserController {
         return userService.getUserByUsername(username);
     }
 
-    @GetMapping("/personality-type")
-    @Operation(description = "Получение типа личности пользователя")
+    @PostMapping("/personality")
+    @Operation(description = "Поставить тип личности пользователю по полю Authorization")
+    @ApiResponses(
+        value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "null в body"),
+            @ApiResponse(responseCode = "404", description = "тип личности не найден")
+        }
+    )
+    public void setUserPersonality(
+        @RequestHeader(name = HttpHeaders.AUTHORIZATION) String authorization,
+        @RequestBody List<PersonalityTypeTestRequest> personalityTypeTestRequest
+    ) {
+        String username = base64Decoder.basicAuthDecoder(authorization)[0];
+        userService.setUserPersonality(username, personalityTypeTestRequest);
+    }
+    
+
+    @GetMapping("/personality")
+    @Operation(description = "Получение типа личности пользователя по полю Authorization")
     @ApiResponses(
         value = {
             @ApiResponse(responseCode = "200", description = "OK")
@@ -102,13 +123,4 @@ public class UserController {
             .contentType(MediaType.IMAGE_JPEG)
             .body(image);
     }
-    
-    
-    //@PostMapping("/{userID/image}")
-    //public void uploadUserProfileImage(
-        //@RequestParam("image") MultipartFile file,
-        //@PathVariable long userID
-    //) throws IOException {
-        //imageService.uploadItemImage(file, userID);
-    //}
 }

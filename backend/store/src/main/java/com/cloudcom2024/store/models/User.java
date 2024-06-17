@@ -70,11 +70,7 @@ public class User {
     @JsonIgnore
     private List<TaskDetails> taskDetails = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    @JsonIgnore
-    private List<Message> messages = new ArrayList<>();
-
-    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "personality_type_id")
     private PersonalityType personalityType;
 
@@ -82,16 +78,12 @@ public class User {
         taskDetails.add(taskDetail);
     }
 
-    public void setMessage(Message message) {
-        messages.add(message);
-    }
-
     public User(long userID) {
         this.userID = userID;
     }
 
     public UserResponse convertToUserResponse(String userProfileImage) {
-        return UserResponse.builder()
+        UserResponse userResponse = UserResponse.builder()
             .userId(userID)
             .username(username)
             .firstname(firstname)
@@ -104,5 +96,10 @@ public class User {
             .email(email)
             .phoneNumber(phoneNumber)
             .build();
+        if (personalityType != null) {
+            userResponse.setPersonalityTypeResponse(personalityType.convertToPersonalityTypeResponse());
+        }
+
+        return userResponse;
     }
 }
