@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getUserDataFromLocalStorage } from '../Helpers/LocalStorage.helpers';
 
 const instance = axios.create({
-	baseURL: 'http://localhost:8080/',
+	baseURL: 'http://localhost:80/',
 	withCredentials: true,
 });
 
