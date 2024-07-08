@@ -36,7 +36,7 @@ const MainPage: FC<MainPageProps> = () => {
             setIsTested(Boolean(tested))
         }
         checkIsTested()
-    })
+    }, [])
 
 
     if (isLoading) {

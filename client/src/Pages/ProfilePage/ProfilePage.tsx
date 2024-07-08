@@ -13,8 +13,8 @@ const ProfilePage: FC = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const response = await (await instance.get<IProfile>('users/profile')).data
-                setProfile(response)
+                const response = await instance.get<IProfile>('users/profile')
+                setProfile(response.data)
             } catch (error) {
                 console.error("Failed to fetch profile data", error);
                 setIsError(true)
