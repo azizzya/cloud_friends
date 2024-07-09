@@ -3,7 +3,9 @@ Cloud Friend - приложение для корпоративной гейми
 <br>
 <br>
 
-Frontend - ReactJS, TypeScript, axios, SCCS, motion. Mobile.
+Frontend - ReactJS, TypeScript, axios, SCCS, motion. 
+<br>
+Only Mobile. Дизайн проект - https://www.figma.com/design/1b8vDdFtzQDobzRiaPqWtg/Hackaton?node-id=0-1&t=dDJT5H6IQn4dhv8d-1
 <br>
 Backend - Java, Spring, PostgreSQL.
 <br>
