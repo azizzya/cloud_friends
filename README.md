@@ -8,7 +8,7 @@ Frontend - ReactJS, TypeScript, axios, SCCS, motion.
 Backend - Java, Spring, PostgreSQL.
 <br>
 
-Задеплоенная версия доступна по ссылке https://azizmadaminov.ru/
+Задеплоенная версия доступна по ссылке http://azizmadaminov.ru/
 <br>
 Аккаунты: admin-admin, user-user
 <br>
